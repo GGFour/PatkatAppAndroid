@@ -20,10 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.example.mdp_frontend.model.NavTabItem
 import com.example.mdp_frontend.ui.components.BottomNavigationBar
-import com.example.mdp_frontend.ui.screen.ChatScreen
-import com.example.mdp_frontend.ui.screen.HomeScreen
-import com.example.mdp_frontend.ui.screen.MapScreen
-import com.example.mdp_frontend.ui.screen.ProfileScreen
+import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +63,10 @@ fun App() {
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier) {
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            Splash(navController)
+        }
         composable("home") {
             HomeScreen(modifier)
         }
