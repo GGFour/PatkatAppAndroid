@@ -1,5 +1,6 @@
-package com.example.mdp_frontend.ui.screen
+package com.example.mdp_frontend.ui.screen.subscreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -17,10 +18,13 @@ import com.example.mdp_frontend.model.CategoryBoxItem
 import com.example.mdp_frontend.model.TopbarItem
 import com.example.mdp_frontend.ui.components.CategoryBox
 import com.example.mdp_frontend.ui.components.TopBar
+import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
 fun AllCategories() {
-    Column {
+    Column(modifier = Modifier.
+    background(md_theme_light_background))
+    {
         TopBar(model = TopbarItem(
             title = "My Screen",
             onBackPressed = { /* do something */ }
