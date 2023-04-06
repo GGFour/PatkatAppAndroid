@@ -7,33 +7,39 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mdp_frontend.model.TopbarItem
+import com.example.mdp_frontend.model.TopBarItem
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(model: TopbarItem) {
+fun TopBar(model: TopBarItem) {
     TopAppBar(
         title = { Text(text = model.title) },
         navigationIcon = {
-            IconButton(onClick = model.onBackPressed) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            if (model.drawNavUp) {
+                IconButton(onClick = model.onNavUpPressed) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                }
             }
         },
         actions = {
-            IconButton(onClick = model.onClosePressed) {
-                Icon(Icons.Filled.Close, contentDescription = "Close")
+            if (model.drawClose) {
+                IconButton(onClick = model.onClosePressed) {
+                    Icon(Icons.Filled.Close, contentDescription = "Close")
+                }
             }
         }
     )
 }
 @Composable
 @Preview
-fun TopbarPreview(){
-    val topbarItem = TopbarItem(
+fun TopBarPreview(){
+    val topBarItem = TopBarItem(
         title = "My Preview",
-        onBackPressed = { /* handle back press */ },
+        drawNavUp = true,
+        drawClose = true,
+        onNavUpPressed = { /* handle back press */ },
         onClosePressed = { /* handle close press */ }
     )
-    TopBar(topbarItem)
+    TopBar(topBarItem)
 }
