@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.R
 import com.example.mdp_frontend.model.CategoryBoxItem
-import com.example.mdp_frontend.model.TopbarItem
+import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.CategoryBox
 import com.example.mdp_frontend.ui.components.TopBar
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
@@ -25,9 +25,10 @@ fun AllCategories() {
     Column(modifier = Modifier.
     background(md_theme_light_background))
     {
-        TopBar(model = TopbarItem(
+
+        TopBar(model = TopBarItem(
             title = "My Screen",
-            onBackPressed = { /* do something */ }
+            onNavUpPressed = { /* do something */ }
         ))
 
 

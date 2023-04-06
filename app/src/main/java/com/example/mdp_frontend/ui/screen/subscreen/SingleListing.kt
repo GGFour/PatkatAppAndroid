@@ -22,16 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.mdp_frontend.model.SingleListingDetail
-import com.example.mdp_frontend.model.TopbarItem
+import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
 
 
 @Composable
 fun ListingDetailScreen(listing: SingleListingDetail) {
     Column {
-        TopBar(model = TopbarItem(
+        TopBar(model = TopBarItem(
             title = "listing detail",
-            onBackPressed = { /* do something */ }
+            onNavUpPressed = { /* do something */ }
             ))
         Column(
             modifier = Modifier

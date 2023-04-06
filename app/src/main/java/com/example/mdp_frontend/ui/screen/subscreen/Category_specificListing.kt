@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.model.ListingCardItem
-import com.example.mdp_frontend.model.TopbarItem
+import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.ListingCard
 import com.example.mdp_frontend.ui.components.TopBar
 
@@ -38,9 +38,9 @@ fun Category_specificListing() {
         )
     )
     Column {
-        TopBar(model = TopbarItem(
+        TopBar(model = TopBarItem(
             title = "Category Listings",
-            onBackPressed = { /* do something */ }
+            onNavUpPressed = { /* do something */ }
         ))
 
         LazyColumn(
