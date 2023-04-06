@@ -3,6 +3,7 @@ package com.example.mdp_frontend
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,8 @@ import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -37,14 +40,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+enum class MainScreen(@StringRes val label: Int? = null, val icon: ImageVector? = null) {
+    Home(label = R.string.bottom_nav_bar_item_label_home, icon = Icons.Outlined.Home),
+    Map(label = R.string.bottom_nav_bar_item_label_map, icon = Icons.Outlined.Map),
+    Chat(label = R.string.bottom_nav_bar_item_label_chat, icon = Icons.Outlined.Chat),
+    Profile(label = R.string.bottom_nav_bar_item_label_profile, icon = Icons.Filled.Person),
+    Splash(),
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     val items = listOf(
-        NavTabItem("Home", "home", Icons.Outlined.Home),
-        NavTabItem("Map", "map", Icons.Outlined.Map),
-        NavTabItem("Chat", "chat", Icons.Outlined.Chat),
-        NavTabItem("Profile", "profile", Icons.Filled.Person),
+        NavTabItem(stringResource(MainScreen.Home.label!!), MainScreen.Home.name, MainScreen.Home.icon!!),
+        NavTabItem(stringResource(MainScreen.Map.label!!), MainScreen.Map.name, MainScreen.Map.icon!!),
+        NavTabItem(stringResource(MainScreen.Chat.label!!), MainScreen.Chat.name, MainScreen.Chat.icon!!),
+        NavTabItem(stringResource(MainScreen.Profile.label!!), MainScreen.Profile.name, MainScreen.Profile.icon!!),
     )
     val navController = rememberNavController()
     Scaffold(
@@ -53,6 +64,7 @@ fun App() {
             modifier = Modifier,
             navController = navController,
             onItemClick = {
+                navController.popBackStack()
                 navController.navigate(it.route)
             }
         )},
@@ -63,20 +75,23 @@ fun App() {
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier) {
-    NavHost(navController = navController, startDestination = "splash") {
-        composable("splash") {
-            Splash(navController)
+    NavHost(navController = navController, startDestination = MainScreen.Splash.name) {
+        composable(MainScreen.Splash.name) {
+            Splash(onAnimationFinish = {
+                navController.popBackStack()
+                navController.navigate(MainScreen.Home.name)
+            })
         }
-        composable("home") {
+        composable(MainScreen.Home.name) {
             HomeScreen(modifier)
         }
-        composable("map") {
+        composable(MainScreen.Map.name) {
             MapScreen(modifier)
         }
-        composable("chat") {
+        composable(MainScreen.Chat.name) {
             ChatScreen(modifier)
         }
-        composable("profile") {
+        composable(MainScreen.Profile.name) {
             ProfileScreen(modifier)
         }
     }

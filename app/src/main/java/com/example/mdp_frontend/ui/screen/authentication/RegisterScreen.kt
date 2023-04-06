@@ -36,17 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.R
-import com.example.mdp_frontend.model.AuthScreenItems
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.viewmodel.RegistrationViewModel
 
 
 @Composable
-fun RegisterScreen(viewModel: RegistrationViewModel, navController: NavController) {
+fun RegisterScreen(viewModel: RegistrationViewModel, onNavTextBtnClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -123,11 +119,7 @@ fun RegisterScreen(viewModel: RegistrationViewModel, navController: NavControlle
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))
-                androidx.compose.material3.TextButton(onClick = {
-                    navController.navigate(AuthScreenItems.Login.route)
-
-
-                }) {
+                androidx.compose.material3.TextButton(onClick = onNavTextBtnClicked) {
                     androidx.compose.material3.Text(
                         text = "Sign In",
                         letterSpacing = 1.sp,
