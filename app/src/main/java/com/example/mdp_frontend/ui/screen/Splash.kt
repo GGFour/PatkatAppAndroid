@@ -16,14 +16,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.mdp_frontend.R
 import kotlinx.coroutines.delay
 import com.example.mdp_frontend.ui.theme.md_theme_dark_background
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
-fun Splash(navController: NavHostController) {
+fun Splash(onAnimationFinish: () -> Unit) {
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
@@ -35,8 +34,7 @@ fun Splash(navController: NavHostController) {
     LaunchedEffect(key1 = true) {
         startAnimation = true
         delay(4000)
-        navController.popBackStack()
-        navController.navigate("home")
+        onAnimationFinish()
     }
     SplashScreen(alpha = alphaAnim.value)
 }

@@ -25,7 +25,6 @@ fun AllCategories() {
     Column(modifier = Modifier.
     background(md_theme_light_background))
     {
-
         TopBar(model = TopBarItem(
             title = "My Screen",
             onNavUpPressed = { /* do something */ }

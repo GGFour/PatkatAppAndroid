@@ -2,7 +2,6 @@
 
 package com.example.mdp_frontend.ui.screen
 
-import android.transition.Visibility
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -37,17 +35,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.R
-import com.example.mdp_frontend.model.AuthScreenItems
 import com.example.mdp_frontend.model.SigninFormEvent
 import com.example.mdp_frontend.viewmodel.SigninViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
-fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
+fun LoginScreen(viewModel: SigninViewModel, onNavTextBtnClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,8 +70,7 @@ fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                ,
+                    .verticalScroll(rememberScrollState()),
 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -87,7 +79,7 @@ fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
                 Spacer(modifier = Modifier.height(50.dp))
 
 
-                androidx.compose.material3.Text(
+                Text(
                     text = "Sign In",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -115,20 +107,12 @@ fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
                     gradientColors = gradientColor,
                     cornerRadius = cornerRadius,
                     nameButton = "Login",
-                    roundedCornerShape = RoundedCornerShape(topStart = 30.dp,bottomEnd = 30.dp)
+                    roundedCornerShape = RoundedCornerShape(topStart = 30.dp, bottomEnd = 30.dp)
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))
-                androidx.compose.material3.TextButton(onClick = {
-
-                    navController.navigate(AuthScreenItems.Register.route)
-                    /*{
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }*/
-
-                }) {
-                    androidx.compose.material3.Text(
+                TextButton(onClick = onNavTextBtnClicked) {
+                    Text(
                         text = "Create An Account",
                         letterSpacing = 1.sp,
                         style = MaterialTheme.typography.labelLarge
@@ -158,7 +142,7 @@ private fun GradientButton(
     roundedCornerShape: RoundedCornerShape
 ) {
 
-    androidx.compose.material3.Button(
+    Button(
 
         modifier = Modifier
             .fillMaxWidth()
@@ -184,7 +168,7 @@ private fun GradientButton(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             contentAlignment = Alignment.Center
         ) {
-            androidx.compose.material3.Text(
+            Text(
                 text = nameButton,
                 fontSize = 20.sp,
                 color = Color.White
@@ -204,8 +188,8 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
     val context = LocalContext.current
 
     LaunchedEffect(key1 = context) {
-        viewModel.signinValidationEvent.collect() { event ->
-            when(event) {
+        viewModel.signinValidationEvent.collect { event ->
+            when (event) {
                 is SigninViewModel.SigninValidationEvent.Success -> {
                     Toast.makeText(
                         context,
@@ -221,12 +205,14 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
         value = state.nameOrEmail,
         onValueChange = { viewModel.onEvent(SigninFormEvent.NameOrEmailChanged(it)) },
         isError = !state.nameOrEmailValidationResult.successful,
-        shape = RoundedCornerShape(topEnd =12.dp, bottomStart =12.dp),
+        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
-            Text("Name or Email Address",
+            Text(
+                "Name or Email Address",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelMedium,
-            ) },
+            )
+        },
         placeholder = { Text(text = "Name or Email Address") },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,
@@ -234,7 +220,8 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.primary),
+            unfocusedBorderColor = MaterialTheme.colorScheme.primary
+        ),
         singleLine = true,
         modifier = Modifier.fillMaxWidth(0.8f),
         keyboardActions = KeyboardActions(
@@ -267,12 +254,14 @@ fun SimpleOutlinedPasswordTextField(viewModel: SigninViewModel) {
         value = state.password,
         onValueChange = { viewModel.onEvent(SigninFormEvent.PasswordChanged(it)) },
         isError = !state.passwordValidationResult.successful,
-        shape = RoundedCornerShape(topEnd =12.dp, bottomStart =12.dp),
+        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
-            Text("Enter Password",
+            Text(
+                "Enter Password",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelMedium,
-            ) },
+            )
+        },
         visualTransformation =
         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         //  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -282,7 +271,8 @@ fun SimpleOutlinedPasswordTextField(viewModel: SigninViewModel) {
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.primary),
+            unfocusedBorderColor = MaterialTheme.colorScheme.primary
+        ),
         trailingIcon = {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
