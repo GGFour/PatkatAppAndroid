@@ -1,15 +1,15 @@
 package com.example.mdp_frontend.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.mdp_frontend.model.ListingUiState
+import com.example.mdp_frontend.domain.model.Listing
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CreateListingFormViewModel: ViewModel() {
-    private val _uiState = MutableStateFlow(ListingUiState())
-    val uiState: StateFlow<ListingUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(Listing())
+    val uiState: StateFlow<Listing> = _uiState.asStateFlow()
 
     fun updateTitle(title: String) {
         _uiState.update { currentState ->
@@ -25,7 +25,7 @@ class CreateListingFormViewModel: ViewModel() {
 
     fun updatePrice(price: String) {
         _uiState.update { currentState ->
-            currentState.copy(priceStr = price, price = price.toIntOrNull() ?: 0)
+            currentState.copy(priceStr = price, price = price.toDoubleOrNull() ?: 0.0)
         }
     }
 
@@ -40,7 +40,7 @@ class CreateListingFormViewModel: ViewModel() {
 
     fun reset() {
         _uiState.update { currentState ->
-            ListingUiState()
+            Listing()
         }
     }
 }

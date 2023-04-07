@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.mdp_frontend.ui.screen
+package com.example.mdp_frontend.ui.authentication
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -35,12 +35,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mdp_frontend.R
 import com.example.mdp_frontend.model.SigninFormEvent
-import com.example.mdp_frontend.viewmodel.SigninViewModel
 
 @Composable
-fun LoginScreen(viewModel: SigninViewModel, onNavTextBtnClicked: () -> Unit) {
+fun LoginScreen(onNavTextBtnClicked: () -> Unit, viewModel: SignInViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,14 +49,9 @@ fun LoginScreen(viewModel: SigninViewModel, onNavTextBtnClicked: () -> Unit) {
                 color = Color.Transparent,
             )
     ) {
-
-
         Box(
-            modifier = Modifier
-
-                .align(Alignment.BottomCenter),
+            modifier = Modifier.align(Alignment.Center),
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.user_sign_in),
                 contentDescription = null,
@@ -64,21 +59,15 @@ fun LoginScreen(viewModel: SigninViewModel, onNavTextBtnClicked: () -> Unit) {
                 modifier = Modifier
                     .height(180.dp)
                     .fillMaxWidth(),
-
-                )
+            )
             Column(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
-
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
                 Spacer(modifier = Modifier.height(50.dp))
-
-
                 Text(
                     text = "Sign In",
                     textAlign = TextAlign.Center,
@@ -146,14 +135,11 @@ private fun GradientButton(
 
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp),
-        onClick = onClick,
+            .padding(start = 32.dp, end = 32.dp), onClick = onClick,
 
-        contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(
+        contentPadding = PaddingValues(), colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent
-        ),
-        shape = RoundedCornerShape(cornerRadius)
+        ), shape = RoundedCornerShape(cornerRadius)
     ) {
 
         Box(
@@ -165,13 +151,10 @@ private fun GradientButton(
                 )
                 .clip(roundedCornerShape)
 
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 16.dp, vertical = 8.dp), contentAlignment = Alignment.Center
         ) {
             Text(
-                text = nameButton,
-                fontSize = 20.sp,
-                color = Color.White
+                text = nameButton, fontSize = 20.sp, color = Color.White
             )
         }
     }
@@ -181,21 +164,18 @@ private fun GradientButton(
 //email id
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
+fun SimpleOutlinedTextFieldSample(viewModel: SignInViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    //var text by rememberSaveable { mutableStateOf("") }
     val state = viewModel.state
     val context = LocalContext.current
 
     LaunchedEffect(key1 = context) {
-        viewModel.signinValidationEvent.collect { event ->
+        viewModel.signInValidationEvent.collect { event ->
             when (event) {
-                is SigninViewModel.SigninValidationEvent.Success -> {
+                is SignInViewModel.SignInValidationEvent.Success -> {
                     Toast.makeText(
-                        context,
-                        "Login Success",
-                        Toast.LENGTH_LONG
-                    ).show()// do something
+                        context, "Login Success", Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -215,8 +195,7 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
         },
         placeholder = { Text(text = "Name or Email Address") },
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next,
-            keyboardType = KeyboardType.Email
+            imeAction = ImeAction.Next, keyboardType = KeyboardType.Email
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -224,12 +203,9 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
         ),
         singleLine = true,
         modifier = Modifier.fillMaxWidth(0.8f),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-                // do something here
-            }
-        )
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        })
 
     )
     if (!state.nameOrEmailValidationResult.successful) {
@@ -244,9 +220,8 @@ fun SimpleOutlinedTextFieldSample(viewModel: SigninViewModel) {
 //password
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SimpleOutlinedPasswordTextField(viewModel: SigninViewModel) {
+fun SimpleOutlinedPasswordTextField(viewModel: SignInViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    //var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     val state = viewModel.state
 
@@ -262,12 +237,9 @@ fun SimpleOutlinedPasswordTextField(viewModel: SigninViewModel) {
                 style = MaterialTheme.typography.labelMedium,
             )
         },
-        visualTransformation =
-        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-        //  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Password
+            imeAction = ImeAction.Done, keyboardType = KeyboardType.Password
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -277,18 +249,14 @@ fun SimpleOutlinedPasswordTextField(viewModel: SigninViewModel) {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                // Please provide localized description for accessibility services
                 val description = if (passwordHidden) "Show password" else "Hide password"
                 Icon(imageVector = visibilityIcon, contentDescription = description)
             }
         },
         modifier = Modifier.fillMaxWidth(0.8f),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-                // do something here
-            }
-        )
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        })
     )
     if (!state.passwordValidationResult.successful) {
         // Error message styling

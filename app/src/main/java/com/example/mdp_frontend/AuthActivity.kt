@@ -8,13 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.mdp_frontend.ui.screen.LoginScreen
-import com.example.mdp_frontend.ui.screen.Splash
-import com.example.mdp_frontend.ui.screen.authentication.RegisterScreen
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.mdp_frontend.ui.authentication.AuthScreensNavigation
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 
 class AuthActivity : ComponentActivity() {
@@ -24,8 +19,7 @@ class AuthActivity : ComponentActivity() {
             MDPfrontendTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     AuthScreensNavigation()
                 }
@@ -34,40 +28,10 @@ class AuthActivity : ComponentActivity() {
     }
 }
 
-enum class AuthScreenItems() {
-    Splash,
-    Login,
-    Register,
-}
-
+@Preview(showBackground = true)
 @Composable
-fun AuthScreensNavigation() {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AuthScreenItems.Splash.name) {
-            composable(route = AuthScreenItems.Register.name) {
-                RegisterScreen(
-                    onNavTextBtnClicked = {
-                      navController.navigateUp()
-                    },
-                    viewModel = viewModel(),
-                )
-            }
-            composable(route = AuthScreenItems.Login.name) {
-                LoginScreen(
-                    onNavTextBtnClicked = {
-                      navController.navigate(AuthScreenItems.Register.name)
-                    },
-                    viewModel = viewModel(),
-                )
-            }
-            composable(route = AuthScreenItems.Splash.name) {
-                Splash(onAnimationFinish = {
-                    navController.popBackStack()
-                    navController.navigate(AuthScreenItems.Login.name)
-                })
-            }
+fun AuthPreview() {
+    MDPfrontendTheme {
+        AuthScreensNavigation()
     }
-
 }

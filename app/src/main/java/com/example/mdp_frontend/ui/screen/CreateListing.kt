@@ -21,8 +21,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.R
+import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
+import com.example.mdp_frontend.ui.screen.subscreen.ListingDetailScreen
 
 import com.example.mdp_frontend.viewmodel.CreateListingFormViewModel
 
@@ -103,9 +105,7 @@ fun CreateListingScreen (
             //  composable(CreateListing.Category.name) {}
                 composable(CreateListing.Review.name) {
                     ReviewListingScreen(
-                        title = uiState.value.title,
-                        description = uiState.value.description,
-                        price = uiState.value.price,
+                        listing = uiState.value,
                         onSubmitPressed = { /*TODO*/ },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) })
                 }
@@ -145,9 +145,10 @@ fun PromptTextScreen(
             onValueChange = onValueChanged,
             label = { Text(title) },
             singleLine = singleLine,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+//            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             textStyle = textStyle,
             trailingIcon = trailingIcon,
+
         )
         ElevatedButton(onClick = onNextPressed ) {
             Text(text = "Continue")
@@ -158,33 +159,20 @@ fun PromptTextScreen(
     }
 }
 
-// TODO: Utilize detailed listing view here once available
 @Composable
 fun ReviewListingScreen(
-    title: String,
-    description: String,
-    price: Int,
+    listing: Listing,
     onSubmitPressed: () -> Unit,
     onCancelPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(8.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.Start,
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            stringResource(id = R.string.listing_price_template, price),
-            style = MaterialTheme.typography.headlineLarge,
-        )
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -196,5 +184,6 @@ fun ReviewListingScreen(
                 Text(text = "Cancel")
             }
         }
+        ListingDetailScreen(listing = listing)
     }
 }
