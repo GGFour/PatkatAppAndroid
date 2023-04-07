@@ -1,25 +1,24 @@
-package com.example.mdp_frontend.viewmodel
+package com.example.mdp_frontend.ui.authentication
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.model.SigninFormEvent
 import com.example.mdp_frontend.model.SigninFormState
 import com.example.mdp_frontend.model.ValidationResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
-class SigninViewModel: ViewModel() {
+class SignInViewModel : ViewModel() {
     var state by mutableStateOf(SigninFormState())
-    private val validationEventChannel = Channel<SigninValidationEvent>()
-    val signinValidationEvent = validationEventChannel.receiveAsFlow()
+    private val validationEventChannel = Channel<SignInValidationEvent>()
+    val signInValidationEvent = validationEventChannel.receiveAsFlow()
 
     private fun validateNameOrEmail(nameOrEmail: String): ValidationResult {
         if (nameOrEmail.isEmpty()) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Name or email cannot be empty"
+                successful = false, errorMessage = "Name or email cannot be empty"
             )
         }
         return ValidationResult(
@@ -30,11 +29,11 @@ class SigninViewModel: ViewModel() {
     private fun validatePassword(password: String): ValidationResult {
         if (password.length < 8) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Password must be at least 8 characters"
+                successful = false, errorMessage = "Password must be at least 8 characters"
             )
         }
-        val containsLetterAndDigits = password.any{it.isDigit()} && password.any{it.isLetter()}
+        val containsLetterAndDigits =
+            password.any { it.isDigit() } && password.any { it.isLetter() }
         if (!containsLetterAndDigits) {
             return ValidationResult(
                 successful = false,
@@ -47,7 +46,7 @@ class SigninViewModel: ViewModel() {
     }
 
     fun onEvent(event: SigninFormEvent) {
-        when(event) {
+        when (event) {
             is SigninFormEvent.NameOrEmailChanged -> {
                 state = state.copy(
                     nameOrEmail = event.nameOrEmail,
@@ -61,12 +60,13 @@ class SigninViewModel: ViewModel() {
                 )
             }
             is SigninFormEvent.Signin -> {
-                LoginSubmitData()
+                loginSubmitData()
             }
         }
 
     }
-    private fun LoginSubmitData(){
+
+    private fun loginSubmitData() {
         val nameOrEmailValidationResult = validateNameOrEmail(state.nameOrEmail)
         val passwordValidationResult = validatePassword(state.password)
         val hasError = listOf(
@@ -74,8 +74,7 @@ class SigninViewModel: ViewModel() {
             passwordValidationResult,
         ).any { !it.successful }
 
-
-        if(hasError) {
+        if (hasError) {
             state = state.copy(
                 nameOrEmailValidationResult = nameOrEmailValidationResult,
                 passwordValidationResult = passwordValidationResult,
@@ -83,13 +82,10 @@ class SigninViewModel: ViewModel() {
             )
             return
         }
-
-
-
-        }
-    sealed class SigninValidationEvent{
-        object Success: SigninValidationEvent()
     }
 
+    sealed class SignInValidationEvent {
+        object Success : SignInValidationEvent()
     }
+}
 

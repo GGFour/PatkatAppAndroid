@@ -21,13 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.mdp_frontend.model.SingleListingDetail
+import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.User
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
 
 
 @Composable
-fun ListingDetailScreen(listing: SingleListingDetail) {
+fun ListingDetailScreen(listing: Listing) {
     Column {
         TopBar(model = TopBarItem(
             title = "listing detail",
@@ -63,14 +64,14 @@ fun ListingDetailScreen(listing: SingleListingDetail) {
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painter = rememberAsyncImagePainter(model = listing.publisherPictureUrl),
+                        painter = rememberAsyncImagePainter(model = listing.publisher?.imageUrl),
                         contentDescription = "Publisher picture",
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
                     )
                     Text(
-                        text = listing.publisherName,
+                        text = listing.publisher?.name ?: "",
                         style = TextStyle(fontSize = 12.sp)
                     )
                     Row {
@@ -115,7 +116,7 @@ fun ListingDetailScreen(listing: SingleListingDetail) {
 fun ListingDetailScreenPreview() {
 
     ListingDetailScreen(
-        SingleListingDetail(
+        Listing(
             id = "1",
     pictureUrl = "https://picsum.photos/200",
     title = "Sample Listing",
@@ -124,8 +125,10 @@ fun ListingDetailScreenPreview() {
             "Vestibulum tortor quam, feugiat vitae, ultricies eget, " +
             "tempor sit amet, ante. Donec eu libero sit amet quam egestas semper." +
             "Aenean ultricies mi vitae est",
-    publisherPictureUrl = "https://picsum.photos/40",
-    publisherName = "John Doe",
+    publisher = User(
+        imageUrl = "https://picsum.photos/40",
+        name = "John Doe",
+    ),
     rating = 4,
     price = 99.99
     )

@@ -1,8 +1,9 @@
-package com.example.mdp_frontend.viewmodel
+package com.example.mdp_frontend.ui.authentication
 
 import android.util.Patterns
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.model.RegistrationFormEvent
@@ -12,7 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel: ViewModel(){
+class RegistrationViewModel : ViewModel() {
     var state by mutableStateOf(RegistrationFormState())
 
     private val validationEventChannel = Channel<ValidationEvent>()
@@ -21,8 +22,7 @@ class RegistrationViewModel: ViewModel(){
     private fun validateName(name: String): ValidationResult {
         if (name.isEmpty()) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Name cannot be empty"
+                successful = false, errorMessage = "Name cannot be empty"
             )
         }
         return ValidationResult(
@@ -33,30 +33,27 @@ class RegistrationViewModel: ViewModel(){
     private fun validateEmail(email: String): ValidationResult {
         if (email.isEmpty()) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Email cannot be empty"
+                successful = false, errorMessage = "Email cannot be empty"
             )
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "That's not a valid email"
+                successful = false, errorMessage = "That's not a valid email"
             )
         }
         return ValidationResult(
             successful = true,
-
         )
     }
 
     private fun validatePassword(password: String): ValidationResult {
         if (password.length < 8) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Password must be at least 8 characters"
+                successful = false, errorMessage = "Password must be at least 8 characters"
             )
         }
-    val containsLetterAndDigits = password.any{it.isDigit()} && password.any{it.isLetter()}
+        val containsLetterAndDigits =
+            password.any { it.isDigit() } && password.any { it.isLetter() }
         if (!containsLetterAndDigits) {
             return ValidationResult(
                 successful = false,
@@ -71,8 +68,7 @@ class RegistrationViewModel: ViewModel(){
     private fun validateRepeatedPassword(repeatedPassword: String): ValidationResult {
         if (state.password != repeatedPassword) {
             return ValidationResult(
-                successful = false,
-                errorMessage = "Passwords do not match"
+                successful = false, errorMessage = "Passwords do not match"
             )
         }
         return ValidationResult(
@@ -81,7 +77,7 @@ class RegistrationViewModel: ViewModel(){
     }
 
     fun onEvent(event: RegistrationFormEvent) {
-        when(event) {
+        when (event) {
             is RegistrationFormEvent.EmailChanged -> {
                 val emailValidationResult = validateEmail(event.email)
                 state = state.copy(
@@ -97,7 +93,8 @@ class RegistrationViewModel: ViewModel(){
                 )
             }
             is RegistrationFormEvent.RepeatedPasswordChanged -> {
-                val repeatedPasswordValidationResult = validateRepeatedPassword(event.repeatedPassword)
+                val repeatedPasswordValidationResult =
+                    validateRepeatedPassword(event.repeatedPassword)
                 state = state.copy(
                     repeatedPasswordValidationResult = repeatedPasswordValidationResult,
                     repeatedPassword = event.repeatedPassword,
@@ -115,7 +112,6 @@ class RegistrationViewModel: ViewModel(){
                 submitData()
             }
         }
-
     }
 
     private fun submitData() {
@@ -130,8 +126,7 @@ class RegistrationViewModel: ViewModel(){
             nameValidationResult
         ).any { !it.successful }
 
-
-        if(hasError) {
+        if (hasError) {
             state = state.copy(
                 emailValidationResult = emailValidationResult,
                 passwordValidationResult = passwordValidationResult,
@@ -144,12 +139,9 @@ class RegistrationViewModel: ViewModel(){
         viewModelScope.launch {
             validationEventChannel.send(ValidationEvent.Success)
         }
-
-
     }
+
     sealed class ValidationEvent {
-        object Success: ValidationEvent()
+        object Success : ValidationEvent()
     }
-
-
 }
