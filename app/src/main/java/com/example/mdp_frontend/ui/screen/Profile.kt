@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -14,14 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
-import com.example.mdp_frontend.ui.theme.md_theme_light_outline
 
 @Composable
-fun ProfileScreen(modifier: Modifier) {
+fun ProfileScreen(
+    modifier: Modifier,
+    onPersonalInfoChecked: () -> Unit,
+    onNotificationsChecked: () -> Unit,
+    onMyServicesChecked: () -> Unit,
+    onMyTasksChecked: () -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxSize().
     background(md_theme_light_background),
         contentPadding = PaddingValues(top = 16.dp)) {
@@ -30,10 +33,10 @@ fun ProfileScreen(modifier: Modifier) {
         }
 
         item {
-            ProfileMenuItem(text = "Personal Info") { /* navigate to personal info screen */ }
-            ProfileMenuItem(text = "Notifications") { /* navigate to notifications screen */ }
-            ProfileMenuItem(text = "My Services") { /* navigate to my services screen */ }
-            ProfileMenuItem(text = "My Tasks") { /* navigate to my tasks screen */ }
+            ProfileMenuItem(text = "Personal Info", onClick = onPersonalInfoChecked)
+            ProfileMenuItem(text = "Notifications", onClick = onNotificationsChecked)
+            ProfileMenuItem(text = "My Services", onClick = onMyServicesChecked)
+            ProfileMenuItem(text = "My Tasks", onClick = onMyTasksChecked)
         }
     }
 }
@@ -93,7 +96,7 @@ fun ProfileMenuItem(text: String, onClick: () -> Unit) {
 }
 
 
-
+/*
 @Composable
 @Preview
 fun ProfilePreview() {
@@ -101,3 +104,4 @@ fun ProfilePreview() {
     background(md_theme_light_background))
 }
 
+*/

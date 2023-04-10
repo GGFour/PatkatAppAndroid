@@ -23,8 +23,13 @@ import androidx.compose.ui.unit.sp
 import com.example.mdp_frontend.ui.components.features
 import com.example.mdp_frontend.ui.theme.*
 
+
+
 @Composable
-fun HomeScreen(modifier: Modifier) {
+fun HomeScreen(
+    modifier: Modifier,
+    onViewCategoriesClick: () -> Unit
+) {
     //Home Screen body
     Box(
         modifier = Modifier
@@ -57,7 +62,8 @@ fun HomeScreen(modifier: Modifier) {
                         title = "Muuttoapu",
                         color = md_theme_dark_onError
                     )
-                )
+                ),
+                        onViewAllClick = onViewCategoriesClick
             )
             SmallCategories(
                 chips = listOf("Valokuvaus", "Eläinhoito", "Puutarhat", "Huolto", "Ikkunoiden pesu", "Remontti")
@@ -159,7 +165,8 @@ fun CreateProfile(onCreateProfileClick: () -> Unit,
 
 @Composable
 fun FeaturedItems(
-    features: List<features>
+    features: List<features>,
+    onViewAllClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -173,6 +180,7 @@ fun FeaturedItems(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(15.dp)
+            .clickable(onClick = onViewAllClick)
         )
         LazyVerticalGrid(
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),

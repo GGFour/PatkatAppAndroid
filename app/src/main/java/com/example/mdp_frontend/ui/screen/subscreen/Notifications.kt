@@ -21,7 +21,7 @@ import com.example.mdp_frontend.ui.components.TopBar
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
-fun Notification() {
+fun Notifications(onNavUp: () -> Unit) {
 
     //sample data but it will be changed
     val notifications = listOf(
@@ -54,7 +54,7 @@ fun Notification() {
     ) {
         TopBar(model = TopBarItem(
             title = "notification",
-            onNavUpPressed = { /* do something */ }
+            onNavUpPressed =  onNavUp
         ))
 
         LazyColumn {
@@ -70,8 +70,10 @@ fun Notification() {
     }
 }
 
+/*
 @Composable
 @Preview
 fun NoPreview(){
-    Notification()
+    Notifications()
 }
+ */
