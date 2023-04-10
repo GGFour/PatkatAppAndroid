@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.R
 import com.example.mdp_frontend.model.CategoryBoxItem
 import com.example.mdp_frontend.model.TopBarItem
@@ -21,13 +23,16 @@ import com.example.mdp_frontend.ui.components.TopBar
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
-fun AllCategories() {
+fun AllCategories(
+    onNavUp: () -> Unit,
+    onCategoryBoxChecked: () -> Unit,
+) {
     Column(modifier = Modifier.
     background(md_theme_light_background))
     {
         TopBar(model = TopBarItem(
-            title = "My Screen",
-            onNavUpPressed = { /* do something */ }
+            title = "All Categories",
+            onNavUpPressed = onNavUp
         ))
 
 
@@ -49,16 +54,22 @@ fun AllCategories() {
                         .size(150.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CategoryBox(categoryBoxItem = item)
+                    CategoryBox(categoryBoxItem = item,
+                        onClick = onCategoryBoxChecked)
+
                 }
             }
         }
     }
 }
 
+/*
 @Composable
 @Preview
 fun AllPreview() {
     AllCategories()
 }
+
+
+ */
 

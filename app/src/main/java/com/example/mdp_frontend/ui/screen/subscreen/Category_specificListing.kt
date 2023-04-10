@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.model.ListingCardItem
 import com.example.mdp_frontend.model.TopBarItem
@@ -14,7 +13,9 @@ import com.example.mdp_frontend.ui.components.ListingCard
 import com.example.mdp_frontend.ui.components.TopBar
 
 @Composable
-fun Category_specificListing() {
+fun Category_specificListing(
+    onNavUp: () -> Unit,
+    onListingCardClick: () -> Unit) {
 
     //sample test, will be change once we have the database set up
     val sampleListings = listOf(
@@ -40,7 +41,7 @@ fun Category_specificListing() {
     Column {
         TopBar(model = TopBarItem(
             title = "Category Listings",
-            onNavUpPressed = { /* do something */ }
+            onNavUpPressed = onNavUp
         ))
 
         LazyColumn(
@@ -48,15 +49,22 @@ fun Category_specificListing() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(sampleListings) { listing ->
-                ListingCard(listing)
+                ListingCard(
+                    listing,
+                    onClick = onListingCardClick
+                )
             }
         }
     }
 }
 
+/*
 @Composable
 @Preview
 fun ChatPreview() {
     Category_specificListing()
 }
 
+
+
+ */

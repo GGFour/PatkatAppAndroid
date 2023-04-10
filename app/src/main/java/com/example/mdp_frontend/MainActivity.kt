@@ -22,8 +22,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.example.mdp_frontend.model.NavTabItem
+import com.example.mdp_frontend.model.SingleListingDetail
 import com.example.mdp_frontend.ui.components.BottomNavigationBar
 import com.example.mdp_frontend.ui.screen.*
+import com.example.mdp_frontend.ui.screen.subscreen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +47,14 @@ enum class MainScreen(@StringRes val label: Int? = null, val icon: ImageVector? 
     Map(label = R.string.bottom_nav_bar_item_label_map, icon = Icons.Outlined.Map),
     Chat(label = R.string.bottom_nav_bar_item_label_chat, icon = Icons.Outlined.Chat),
     Profile(label = R.string.bottom_nav_bar_item_label_profile, icon = Icons.Filled.Person),
-    Splash(),
+    Splash,
+    AllCategories,
+    CategorySpecific,
+    ListingDetails,
+    PersonalInfo,
+    Notifications,
+    MyServices,
+    MyTasks
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +92,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
             })
         }
         composable(MainScreen.Home.name) {
-            HomeScreen(modifier)
+            HomeScreen(
+                modifier,
+                onViewCategoriesClick = { navController.navigate(MainScreen.AllCategories.name) }
+            )
         }
         composable(MainScreen.Map.name) {
             MapScreen(modifier)
@@ -92,8 +104,61 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
             ChatScreen(modifier)
         }
         composable(MainScreen.Profile.name) {
-            ProfileScreen(modifier)
+            ProfileScreen(
+                modifier,
+                onPersonalInfoChecked = { navController.navigate(MainScreen.PersonalInfo.name)},
+                onNotificationsChecked = { navController.navigate(MainScreen.Notifications.name)},
+                onMyServicesChecked = { navController.navigate(MainScreen.MyServices.name)},
+                onMyTasksChecked = { navController.navigate(MainScreen.MyTasks.name)}
+            )
         }
+        composable(MainScreen.AllCategories.name) {
+            AllCategories(
+            onNavUp = { navController.navigateUp() },
+            onCategoryBoxChecked = { navController.navigate(MainScreen.CategorySpecific.name)}
+            )
+        }
+        composable(MainScreen.CategorySpecific.name) {
+            Category_specificListing(
+                onNavUp = { navController.navigateUp() },
+                onListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)}
+            )
+        }
+
+         composable(MainScreen.ListingDetails.name) {
+             ListingDetailScreen(SingleListingDetail(
+             id = "1",
+             pictureUrl = "https://picsum.photos/200",
+             title = "Sample Listing",
+             description = "This is a sample listing for preview purposes." +
+                     "senectus et netus et malesuada fames ac turpis egestas. " +
+                     "Vestibulum tortor quam, feugiat vitae, ultricies eget, " +
+                     "tempor sit amet, ante. Donec eu libero sit amet quam egestas semper." +
+                     "Aenean ultricies mi vitae est",
+             publisherPictureUrl = "https://picsum.photos/40",
+             publisherName = "John Doe",
+             rating = 4,
+             price = 99.99
+         ),
+                 onNavUp = { navController.navigateUp()}
+         ) }
+
+        //navigation for profile sub-screens
+        composable(MainScreen.PersonalInfo.name) {
+            PersonalInfo( onNavUp = { navController.navigateUp() })
+        }
+        composable(MainScreen.Notifications.name) {
+            Notifications( onNavUp = { navController.navigateUp() })
+        }
+        composable(MainScreen.MyServices.name) {
+            MyServices( onNavUp = { navController.navigateUp() })
+        }
+        composable(MainScreen.MyTasks.name) {
+            MyTasks( onNavUp = { navController.navigateUp() })
+        }
+
+
+
     }
 }
 
