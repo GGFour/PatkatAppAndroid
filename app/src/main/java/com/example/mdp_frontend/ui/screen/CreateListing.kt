@@ -184,6 +184,8 @@ fun ReviewListingScreen(
                 Text(text = "Cancel")
             }
         }
-        ListingDetailScreen(listing = listing)
+        //temporary!!
+        val navController = rememberNavController()
+        ListingDetailScreen(listing = listing , onNavUp = {navController.navigateUp()})
     }
 }

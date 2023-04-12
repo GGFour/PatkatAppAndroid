@@ -12,4 +12,5 @@ data class Listing(
     val category: String? = null,
     val publisher: User? = null,
     val rating: Int = 0,
+    val publishedDate: String = ""
 )
