@@ -2,6 +2,7 @@ package com.example.mdp_frontend.ui.screen
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -58,6 +59,7 @@ fun ProfileMenuItem(text: String, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         IconButton(
             onClick = onClick,

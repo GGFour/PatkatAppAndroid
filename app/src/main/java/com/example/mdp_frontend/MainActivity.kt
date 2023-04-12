@@ -15,14 +15,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.User
 import com.example.mdp_frontend.model.NavTabItem
-import com.example.mdp_frontend.model.SingleListingDetail
 import com.example.mdp_frontend.ui.components.BottomNavigationBar
 import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.screen.subscreen.*
@@ -94,7 +96,8 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         composable(MainScreen.Home.name) {
             HomeScreen(
                 modifier,
-                onViewCategoriesClick = { navController.navigate(MainScreen.AllCategories.name) }
+                onViewCategoriesClick = { navController.navigate(MainScreen.AllCategories.name) },
+                onViewListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
             )
         }
         composable(MainScreen.Map.name) {
@@ -121,12 +124,15 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         composable(MainScreen.CategorySpecific.name) {
             Category_specificListing(
                 onNavUp = { navController.navigateUp() },
-                onListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)}
+                onListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
+                context = LocalContext.current
+
             )
         }
 
          composable(MainScreen.ListingDetails.name) {
-             ListingDetailScreen(SingleListingDetail(
+                 ListingDetailScreen(
+                     Listing(
              id = "1",
              pictureUrl = "https://picsum.photos/200",
              title = "Sample Listing",
@@ -135,8 +141,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                      "Vestibulum tortor quam, feugiat vitae, ultricies eget, " +
                      "tempor sit amet, ante. Donec eu libero sit amet quam egestas semper." +
                      "Aenean ultricies mi vitae est",
-             publisherPictureUrl = "https://picsum.photos/40",
-             publisherName = "John Doe",
+                         publisher = User(name = "John Doe", imageUrl = "https://picsum.photos/40"),
              rating = 4,
              price = 99.99
          ),
