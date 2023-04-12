@@ -2,6 +2,7 @@ package com.example.mdp_frontend.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.typography
@@ -20,7 +21,8 @@ import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
 
 @Composable
 fun CategoryBox(categoryBoxItem: CategoryBoxItem,
-                modifier: Modifier = Modifier
+                modifier: Modifier = Modifier,
+                onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -30,6 +32,7 @@ fun CategoryBox(categoryBoxItem: CategoryBoxItem,
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().align(Alignment.Center),
@@ -50,6 +53,7 @@ fun CategoryBox(categoryBoxItem: CategoryBoxItem,
     }
 }
 
+/*
 @Composable
 @Preview
 fun BoxPreview(){
@@ -58,3 +62,5 @@ fun BoxPreview(){
         imageResId = R.drawable.demo
     ) )
 }
+
+ */

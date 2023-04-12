@@ -28,11 +28,14 @@ import com.example.mdp_frontend.ui.components.TopBar
 
 
 @Composable
-fun ListingDetailScreen(listing: Listing) {
+fun ListingDetailScreen(
+    listing: Listing,
+    onNavUp: () -> Unit,
+) {
     Column {
         TopBar(model = TopBarItem(
             title = "listing detail",
-            onNavUpPressed = { /* do something */ }
+            onNavUpPressed = onNavUp
             ))
         Column(
             modifier = Modifier
@@ -110,7 +113,8 @@ fun ListingDetailScreen(listing: Listing) {
     }
 }
 
-//will be deleted
+
+/*
 @Composable
 @Preview
 fun ListingDetailScreenPreview() {
@@ -134,3 +138,5 @@ fun ListingDetailScreenPreview() {
     )
     )
 }
+
+ */

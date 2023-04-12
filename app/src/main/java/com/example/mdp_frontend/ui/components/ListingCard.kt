@@ -1,5 +1,6 @@
 package com.example.mdp_frontend.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -14,11 +15,15 @@ import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.model.ListingCardItem
 
 @Composable
-fun ListingCard(Listing: ListingCardItem) {
+fun ListingCard(
+    Listing: ListingCardItem,
+    onClick: () -> Unit)
+{
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
         )
@@ -53,6 +58,8 @@ fun ListingCard(Listing: ListingCardItem) {
     }
 }
 
+
+/*
 @Composable
 @Preview
 fun ListingCardPreview(){
@@ -63,3 +70,5 @@ fun ListingCardPreview(){
         date = "2023-04-03"
     ) )
 }
+
+ */
