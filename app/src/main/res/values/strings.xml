@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">MDP-frontend</string>
+    <string name="title_activity_auth">AuthActivity</string>
+
+    <string name="bottom_nav_bar_item_label_home">Home</string>
+    <string name="bottom_nav_bar_item_label_map">Map</string>
+    <string name="bottom_nav_bar_item_label_chat">Chat</string>
+    <string name="bottom_nav_bar_item_label_profile">Profile</string>
+
+
+    <string name="title_activity_create_listing">CreateListingActivity</string>
+    <string name="create_listing_title_title">Select Title</string>
+    <string name="create_listing_title_description">Write Description</string>
+    <string name="create_listing_title_photo">Select Photo</string>
+    <string name="create_listing_title_price">Set Price</string>
+    <string name="create_listing_title_location">Set Coordinates</string>
+    <string name="create_listing_title_category">Select a Category</string>
+    <string name="create_listing_title_review">Review Your Listing</string>
+
+    <string name="listing_price_template">%d €</string>
 </resources>

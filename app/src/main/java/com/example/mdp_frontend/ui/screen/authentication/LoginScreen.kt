@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.mdp_frontend.ui.screen
 
 import android.transition.Visibility
@@ -41,13 +39,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.R
-import com.example.mdp_frontend.model.AuthScreenItems
 import com.example.mdp_frontend.model.SigninFormEvent
 import com.example.mdp_frontend.viewmodel.SigninViewModel
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
+fun LoginScreen(modifier: Modifier, navController: NavHostController, viewModel: SigninViewModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,7 +118,7 @@ fun LoginScreen( navController: NavHostController, viewModel: SigninViewModel) {
                 Spacer(modifier = Modifier.padding(10.dp))
                 androidx.compose.material3.TextButton(onClick = {
 
-                    navController.navigate(AuthScreenItems.Register.route)
+                    navController.navigate("register")
                     /*{
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
