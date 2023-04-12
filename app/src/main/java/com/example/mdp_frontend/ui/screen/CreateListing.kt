@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,7 +40,7 @@ enum class CreateListing(@StringRes val title: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateListingScreen (
-    viewModel: CreateListingFormViewModel = viewModel(),
+    viewModel: CreateListingFormViewModel = hiltViewModel(),
     closeActivity: () -> Unit = {},
 ) {
     val navController = rememberNavController()
@@ -106,7 +106,7 @@ fun CreateListingScreen (
                 composable(CreateListing.Review.name) {
                     ReviewListingScreen(
                         listing = uiState.value,
-                        onSubmitPressed = { /*TODO*/ },
+                        onSubmitPressed = { viewModel.addListing() },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) })
                 }
             }

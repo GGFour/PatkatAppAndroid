@@ -1,15 +1,30 @@
 package com.example.mdp_frontend.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.Response
+import com.example.mdp_frontend.domain.repository.AddListingResponse
+import com.example.mdp_frontend.domain.use_case.UseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateListingFormViewModel: ViewModel() {
+@HiltViewModel
+class CreateListingFormViewModel @Inject constructor(
+    private val useCases: UseCases
+): ViewModel() {
     private val _uiState = MutableStateFlow(Listing())
     val uiState: StateFlow<Listing> = _uiState.asStateFlow()
+    var addListingResponse by mutableStateOf<AddListingResponse>(Response.Success(false))
+        private set
 
     fun updateTitle(title: String) {
         _uiState.update { currentState ->
@@ -36,6 +51,11 @@ class CreateListingFormViewModel: ViewModel() {
                 longitude = long,
             )
         }
+    }
+
+    fun addListing() = viewModelScope.launch {
+        addListingResponse = Response.Loading
+        addListingResponse = useCases.addListing(uiState.value)
     }
 
     fun reset() {
