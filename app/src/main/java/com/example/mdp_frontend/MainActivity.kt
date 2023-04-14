@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -33,6 +34,12 @@ import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.screen.subscreen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 
+import com.example.mdp_frontend.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import io.grpc.Context
+
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +59,6 @@ enum class MainScreen(@StringRes val label: Int? = null, val icon: ImageVector? 
     Map(label = R.string.bottom_nav_bar_item_label_map, icon = Icons.Outlined.Map),
     Chat(label = R.string.bottom_nav_bar_item_label_chat, icon = Icons.Outlined.Chat),
     Profile(label = R.string.bottom_nav_bar_item_label_profile, icon = Icons.Filled.Person),
-    Splash,
     AllCategories,
     CategorySpecific,
     ListingDetails,
@@ -91,12 +97,7 @@ fun App() {
 fun Navigation(navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current as Activity
         NavHost(navController = navController, startDestination = MainScreen.Home.name) {
-        composable(MainScreen.Splash.name) {
-            Splash(onAnimationFinish = {
-                navController.popBackStack()
-                navController.navigate(MainScreen.Home.name)
-            })
-        }
+
         composable(MainScreen.Home.name) {
             HomeScreen(
                 modifier,
@@ -121,7 +122,8 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                 onPersonalInfoChecked = { navController.navigate(MainScreen.PersonalInfo.name)},
                 onNotificationsChecked = { navController.navigate(MainScreen.Notifications.name)},
                 onMyServicesChecked = { navController.navigate(MainScreen.MyServices.name)},
-                onMyTasksChecked = { navController.navigate(MainScreen.MyTasks.name)}
+                onMyTasksChecked = { navController.navigate(MainScreen.MyTasks.name)},
+
             )
         }
         composable(MainScreen.AllCategories.name) {
@@ -160,7 +162,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
 
         //navigation for profile sub-screens
         composable(MainScreen.PersonalInfo.name) {
-            PersonalInfo( onNavUp = { navController.navigateUp() })
+            PersonalInfo( onNavUp = { navController.navigateUp() },)
         }
         composable(MainScreen.Notifications.name) {
             Notifications( onNavUp = { navController.navigateUp() })

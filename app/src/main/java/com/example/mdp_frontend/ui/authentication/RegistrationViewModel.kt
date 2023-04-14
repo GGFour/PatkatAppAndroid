@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.model.RegistrationFormState
 import com.example.mdp_frontend.model.ValidationResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch

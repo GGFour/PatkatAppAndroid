@@ -4,13 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.mdp_frontend.domain.repository.AuthRepository
 import com.example.mdp_frontend.model.SigninFormEvent
 import com.example.mdp_frontend.model.SigninFormState
 import com.example.mdp_frontend.model.ValidationResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import java.lang.reflect.Constructor
+import javax.inject.Inject
 
-class SignInViewModel : ViewModel() {
+
+class SignInViewModel: ViewModel()  {
     var state by mutableStateOf(SigninFormState())
     private val validationEventChannel = Channel<SignInValidationEvent>()
     val signInValidationEvent = validationEventChannel.receiveAsFlow()

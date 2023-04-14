@@ -1,10 +1,12 @@
 package com.example.mdp_frontend.ui.authentication
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.ui.screen.Splash
+import com.example.mdp_frontend.viewmodel.AuthViewModel
 
 enum class AuthScreenItems {
     Splash, Login, Register,
@@ -14,6 +16,7 @@ enum class AuthScreenItems {
 fun AuthScreensNavigation(
     onAuthSuccess: () -> Unit,
     onAuthenticated: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -26,6 +29,7 @@ fun AuthScreensNavigation(
                     navController.navigateUp()
                 },
                 onRegisterSuccess = onAuthSuccess,
+                fViewModel = viewModel,
             )
         }
         composable(route = AuthScreenItems.Login.name) {
@@ -34,6 +38,7 @@ fun AuthScreensNavigation(
                     navController.navigate(AuthScreenItems.Register.name)
                 },
                 onLoginSuccess = onAuthSuccess,
+                fViewModel = viewModel,
             )
         }
         composable(route = AuthScreenItems.Splash.name) {

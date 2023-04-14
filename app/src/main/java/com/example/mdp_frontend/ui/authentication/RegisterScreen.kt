@@ -18,17 +18,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mdp_frontend.R
+import com.example.mdp_frontend.domain.model.Resource
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.ui.authentication.components.*
+import com.example.mdp_frontend.viewmodel.AuthViewModel
 
 
 @Composable
 fun RegisterScreen(
     onNavTextBtnClicked: () -> Unit,
     onRegisterSuccess: () -> Unit,
-    viewModel: RegistrationViewModel = viewModel()
+    fViewModel : AuthViewModel?,
+    viewModel: RegistrationViewModel = viewModel(),
+
 ) {
     val state = viewModel.state
+    val registerFlow = fViewModel?.registerFlow?.collectAsState()
 
     Box(
         modifier = Modifier
@@ -39,7 +44,7 @@ fun RegisterScreen(
             )
     ) {
         val context = LocalContext.current
-        LaunchedEffect(key1 = context) {
+        /* LaunchedEffect(key1 = context) {
             viewModel.validationEvent.collect { event ->
                 when (event) {
                     is RegistrationViewModel.ValidationEvent.Success -> {
@@ -49,7 +54,7 @@ fun RegisterScreen(
                     }
                 }
             }
-        }
+        } */
         Box(
             modifier = Modifier.align(Alignment.Center),
         ) {
@@ -119,10 +124,19 @@ fun RegisterScreen(
                     text = "Create An Account",
                     onClick = {
                         viewModel.onEvent(RegistrationFormEvent.Register)
-                        if (viewModel.state.isDataValid) {
-                            onRegisterSuccess()  // TODO: Check if guy has really authed in firebase
-                        }
+                        fViewModel?.register(
+                            email = state.email,
+                            password = state.password,
+                            name = state.name)
                     },
+                    /*onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.Register)
+                        if (viewModel.state.isDataValid) {
+                            fViewModel.registerUser(state.email, state.password)
+                        }
+                    }
+                    */
+
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -132,6 +146,29 @@ fun RegisterScreen(
                 )
 
                 Spacer(modifier = Modifier.padding(40.dp))
+            }
+        }
+
+        registerFlow?.value?.let {
+            when (it) {
+                is Resource.Error -> {
+                    val context = LocalContext.current
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                }
+                Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.Center),
+                    )
+                }
+                is Resource.Success -> {
+                    LaunchedEffect(Unit){
+                        onRegisterSuccess()
+                    }
+
+
+                }
             }
         }
     }

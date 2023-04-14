@@ -2,6 +2,7 @@
 
 package com.example.mdp_frontend.ui.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,24 +15,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mdp_frontend.R
+import com.example.mdp_frontend.domain.model.Resource
 import com.example.mdp_frontend.model.SigninFormEvent
 import com.example.mdp_frontend.ui.authentication.components.AuthEmailInput
 import com.example.mdp_frontend.ui.authentication.components.AuthGradientButton
 import com.example.mdp_frontend.ui.authentication.components.AuthPasswordInput
 import com.example.mdp_frontend.ui.authentication.components.AuthTextButton
+import com.example.mdp_frontend.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
     onNavTextBtnClicked: () -> Unit,
     onLoginSuccess: () -> Unit,
-    viewModel: SignInViewModel = viewModel()
+    viewModel: SignInViewModel = viewModel(),
+    fViewModel : AuthViewModel?
+
 ) {
     val state = viewModel.state
+    val loginFlow = fViewModel?.loginFlow?.collectAsState()
 
     Box(
         modifier = Modifier
@@ -89,9 +96,7 @@ fun LoginScreen(
                     text = "Login",
                     onClick = {
                         viewModel.onEvent(SigninFormEvent.Signin)
-                        if (viewModel.state.isDataValid) {
-                            onLoginSuccess()  // TODO: Check if guy has really authed in firebase
-                        }
+                        fViewModel?.login(state.nameOrEmail, state.password)
                     },
                 )
 
@@ -102,6 +107,26 @@ fun LoginScreen(
                 )
 
                 Spacer(modifier = Modifier.padding(30.dp))
+            }
+        }
+        loginFlow?.value?.let {
+            when (it) {
+                is Resource.Error -> {
+                    val context = LocalContext.current
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                }
+                Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.Center),
+                    )
+                }
+                is Resource.Success -> {
+                    LaunchedEffect(Unit){onLoginSuccess()}
+
+
+                }
             }
         }
     }
