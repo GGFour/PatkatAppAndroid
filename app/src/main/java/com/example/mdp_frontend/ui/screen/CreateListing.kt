@@ -2,9 +2,7 @@ package com.example.mdp_frontend.ui.screen
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EuroSymbol
 import androidx.compose.material.icons.outlined.EuroSymbol
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -24,7 +21,6 @@ import com.example.mdp_frontend.R
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
-import com.example.mdp_frontend.ui.screen.subscreen.ListingDetailScreen
 
 import com.example.mdp_frontend.viewmodel.CreateListingFormViewModel
 
@@ -174,8 +170,21 @@ fun ReviewListingScreen(
         horizontalAlignment = Alignment.Start,
     ) {
         Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "Title", style = MaterialTheme.typography.headlineSmall)
+            Text(text = listing.title, style = MaterialTheme.typography.bodyMedium)
+            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            Text(text = "Description", style = MaterialTheme.typography.headlineSmall)
+            Text(text = listing.description, style = MaterialTheme.typography.bodyMedium)
+            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            Text(text = "Price", style = MaterialTheme.typography.headlineSmall)
+            Text(text = listing.priceStr, style = MaterialTheme.typography.bodyMedium)
+        }
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             ElevatedButton(onClick = onSubmitPressed ) {
                 Text(text = "Submit")
@@ -184,8 +193,5 @@ fun ReviewListingScreen(
                 Text(text = "Cancel")
             }
         }
-        //temporary!!
-        val navController = rememberNavController()
-        ListingDetailScreen(listing = listing , onNavUp = {navController.navigateUp()})
     }
 }

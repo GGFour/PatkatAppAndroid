@@ -1,5 +1,6 @@
 package com.example.mdp_frontend
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -31,7 +32,6 @@ import com.example.mdp_frontend.ui.components.BottomNavigationBar
 import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.screen.subscreen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
-import io.grpc.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,6 @@ enum class MainScreen(@StringRes val label: Int? = null, val icon: ImageVector? 
     MyTasks
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     val items = listOf(
@@ -87,10 +86,11 @@ fun App() {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current as Activity
-    NavHost(navController = navController, startDestination = MainScreen.Splash.name) {
+        NavHost(navController = navController, startDestination = MainScreen.Home.name) {
         composable(MainScreen.Splash.name) {
             Splash(onAnimationFinish = {
                 navController.popBackStack()
@@ -106,6 +106,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                    val intent = Intent(context, CreateListingActivity::class.java)
                     context.startActivity(intent)
                 },
+                context = LocalContext.current
             )
         }
         composable(MainScreen.Map.name) {
@@ -131,9 +132,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         }
         composable(MainScreen.CategorySpecific.name) {
             Category_specificListing(
+                modifier,
                 onNavUp = { navController.navigateUp() },
                 onListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
-                context = LocalContext.current
+                context = LocalContext.current,
 
             )
         }
