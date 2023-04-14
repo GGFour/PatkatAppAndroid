@@ -1,5 +1,6 @@
 package com.example.mdp_frontend.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
@@ -49,6 +50,14 @@ class CreateListingFormViewModel @Inject constructor(
             currentState.copy(
                 latitude = lat,
                 longitude = long,
+            )
+        }
+    }
+
+    fun updateImageUri(newUri: Uri?) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                pictureUri = newUri,
             )
         }
     }

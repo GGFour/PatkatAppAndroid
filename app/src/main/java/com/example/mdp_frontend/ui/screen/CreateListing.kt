@@ -1,7 +1,12 @@
 package com.example.mdp_frontend.ui.screen
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EuroSymbol
 import androidx.compose.material3.*
@@ -9,7 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -17,8 +23,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.mdp_frontend.R
 import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
 
@@ -33,11 +41,11 @@ enum class CreateListing(@StringRes val title: Int) {
     Category(title = R.string.create_listing_title_category),
     Review(title = R.string.create_listing_title_review),;
 }
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateListingScreen (
     viewModel: CreateListingFormViewModel = hiltViewModel(),
     closeActivity: () -> Unit = {},
+    onListingCreated: () -> Unit = {},
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -46,14 +54,19 @@ fun CreateListingScreen (
     )
     val uiState = viewModel.uiState.collectAsState()
     Scaffold (
-        topBar = { TopBar(TopBarItem(
+        topBar = { TopBar(
+            TopBarItem(
             title = stringResource(id = currentScreen.title),
             drawNavUp = currentScreen != CreateListing.Title,
             drawClose = currentScreen == CreateListing.Title,
             onNavUpPressed = { navController.navigateUp() },
             onClosePressed = { closeActivity() },
-        )) },
+        )
+        ) },
             ){
+        if (viewModel.addListingResponse == Response.Success(true)) {
+            onListingCreated()
+        }
         Column(
             modifier = Modifier
                 .padding(it)
@@ -63,40 +76,42 @@ fun CreateListingScreen (
         ) {
             NavHost(navController = navController, startDestination = CreateListing.Title.name) {
                 composable(CreateListing.Title.name) {
-                    PromptTextScreen(
+                    WriteTitleScreen(
                         value= uiState.value.title,
                         onValueChanged = { viewModel.updateTitle(it) },
                         onNextPressed = { navController.navigate(CreateListing.Description.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
                         title = stringResource(id = currentScreen.title),
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.headlineSmall,
                     )
                 }
                 composable(CreateListing.Description.name) {
-                    PromptTextScreen(
+                    WriteDescriptionScreen(
                         value= uiState.value.description,
                         onValueChanged = {viewModel.updateDescription(it)},
-                        onNextPressed = { navController.navigate(CreateListing.Price.name) },
+                        onNextPressed = { navController.navigate(CreateListing.Photo.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
                         title = stringResource(id = currentScreen.title),
-                        singleLine = false,
+                    )
+                }
+                composable(CreateListing.Photo.name) {
+                    SelectPictureScreen(
+                        selectedPicture = uiState.value.pictureUri,
+                        updatePicture = { viewModel.updateImageUri(it) },
+                        onNextPressed = { navController.navigate(CreateListing.Price.name) },
+                        onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
                     )
                 }
                 composable(CreateListing.Price.name) {
-                    PromptTextScreen(
+                    SelectPriceScreen(
                         value= uiState.value.priceStr,
-                        onValueChanged = {viewModel.updatePrice(it)},
+                        onValueChanged = { viewModel.updatePrice(it) },
                         onNextPressed = { navController.navigate(CreateListing.Review.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
                         title = stringResource(id = currentScreen.title),
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.headlineLarge,
-                        trailingIcon = { Icon(Icons.Outlined.EuroSymbol, null) }
                     )
                 }
             //  TODO:
-            //  (CreateListing.Photo.name) {}
+            //  upload listing photo
             //  composable(CreateListing.Location.name) {}
             //  composable(CreateListing.Category.name) {}
                 composable(CreateListing.Review.name) {
@@ -120,43 +135,132 @@ private fun cancelAndNavigateToStart(
 }
 
 @Composable
-fun PromptTextScreen(
+fun WriteTitleScreen(
+    title: String,
     value: String,
     onValueChanged: (String) -> Unit,
     onNextPressed: () -> Unit,
     onCancelPressed: () -> Unit,
-    title: String,
-    singleLine: Boolean,
-    modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    trailingIcon: @Composable () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChanged,
-            label = { Text(title) },
-            singleLine = singleLine,
-//            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            textStyle = textStyle,
-            trailingIcon = trailingIcon,
-
-        )
-        ElevatedButton(onClick = onNextPressed ) {
-            Text(text = "Continue")
+    ListingScreenContainer(onNextPressed = onNextPressed, onCancelPressed = onCancelPressed) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChanged,
+                label = { Text(title) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                textStyle = MaterialTheme.typography.headlineSmall,
+            )
         }
-        OutlinedButton(onClick = onCancelPressed) {
-            Text(text = "Cancel")
+    }
+}
+@Composable
+private fun WriteDescriptionScreen(
+    title: String,
+    value: String,
+    onValueChanged: (String) -> Unit,
+    onNextPressed: () -> Unit,
+    onCancelPressed: () -> Unit,
+) {
+    ListingScreenContainer(onNextPressed = onNextPressed, onCancelPressed = onCancelPressed) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChanged,
+                label = { Text(title) },
+                singleLine = false,
+                minLines = 3,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                textStyle = MaterialTheme.typography.bodyLarge,
+            )
         }
     }
 }
 
 @Composable
-fun ReviewListingScreen(
+private fun SelectPriceScreen(
+    title: String,
+    value: String,
+    onValueChanged: (String) -> Unit,
+    onNextPressed: () -> Unit,
+    onCancelPressed: () -> Unit,
+) {
+    ListingScreenContainer(onNextPressed = onNextPressed, onCancelPressed = onCancelPressed) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChanged,
+                label = { Text(title) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Number,
+                ),
+                textStyle = MaterialTheme.typography.headlineLarge,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.EuroSymbol,
+                        contentDescription = null
+                    )
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun SelectPictureScreen(
+    selectedPicture: Uri?,
+    updatePicture: (Uri?) -> Unit,
+    onNextPressed: () -> Unit,
+    onCancelPressed: () -> Unit,
+) {
+    val galleryLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(), onResult = updatePicture)
+    ListingScreenContainer(onNextPressed = onNextPressed, onCancelPressed = onCancelPressed) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (selectedPicture != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = selectedPicture),
+                    contentDescription = "Selected Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                ElevatedButton(onClick = {
+                    galleryLauncher.launch("image/*")
+                }
+                ) {
+                    Text(text = "Update Image")
+                }
+            } else {
+                ElevatedButton(onClick = {
+                    galleryLauncher.launch("image/*")
+                }
+                ) {
+                    Text(text = "Select Image")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReviewListingScreen(
     listing: Listing,
     onSubmitPressed: () -> Unit,
     onCancelPressed: () -> Unit,
@@ -191,6 +295,36 @@ fun ReviewListingScreen(
             }
             OutlinedButton(onClick = onCancelPressed) {
                 Text(text = "Cancel")
+            }
+        }
+    }
+}
+
+@Composable
+private fun ListingScreenContainer(
+    onNextPressed: () -> Unit,
+    onCancelPressed: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        content()
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OutlinedButton(onClick = onCancelPressed) {
+                Text(text = "Cancel")
+            }
+            ElevatedButton(onClick = onNextPressed) {
+                Text(text = "Next")
             }
         }
     }
