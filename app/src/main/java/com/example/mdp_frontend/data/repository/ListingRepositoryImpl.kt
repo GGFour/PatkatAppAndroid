@@ -39,7 +39,7 @@ class ListingRepositoryImpl @Inject constructor(
             val listingWithId = listing.copy(
                 id = id,
                 publishedDate = Timestamp.now(),
-
+                pictureUri = null,
             )
             listingRef.document(id).set(listingWithId)
             Response.Success(true)
