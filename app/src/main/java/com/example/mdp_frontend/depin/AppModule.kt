@@ -1,10 +1,13 @@
 package com.example.mdp_frontend.depin
 
 
+import com.example.mdp_frontend.data.repository.AuthRepositoryImpl
 import com.example.mdp_frontend.data.repository.ListingRepositoryImpl
+import com.example.mdp_frontend.domain.repository.AuthRepository
 import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.use_case.AddListing
 import com.example.mdp_frontend.domain.use_case.UseCases
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,4 +33,11 @@ object AppModule {
     ) = UseCases(
         addListing = AddListing(repo),
     )
+
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
+
 }
