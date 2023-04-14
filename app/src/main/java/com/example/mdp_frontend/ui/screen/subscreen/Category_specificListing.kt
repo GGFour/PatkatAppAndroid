@@ -67,7 +67,7 @@ fun Category_specificListing(
                             title = listing.title,
                             category = listing.category ?: "",
                             location = address,
-                            date = listing.publishedDate
+                            date = ""
                         )
                     }
                 }
