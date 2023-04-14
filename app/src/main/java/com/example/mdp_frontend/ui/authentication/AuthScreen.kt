@@ -11,7 +11,10 @@ enum class AuthScreenItems {
 }
 
 @Composable
-fun AuthScreensNavigation() {
+fun AuthScreensNavigation(
+    onAuthSuccess: () -> Unit,
+    onAuthenticated: () -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -22,6 +25,7 @@ fun AuthScreensNavigation() {
                 onNavTextBtnClicked = {
                     navController.navigateUp()
                 },
+                onRegisterSuccess = onAuthSuccess,
             )
         }
         composable(route = AuthScreenItems.Login.name) {
@@ -29,12 +33,18 @@ fun AuthScreensNavigation() {
                 onNavTextBtnClicked = {
                     navController.navigate(AuthScreenItems.Register.name)
                 },
+                onLoginSuccess = onAuthSuccess,
             )
         }
         composable(route = AuthScreenItems.Splash.name) {
             Splash(onAnimationFinish = {
-                navController.popBackStack()
-                navController.navigate(AuthScreenItems.Login.name)
+                val isAuthenticated = false  // TODO: Check if guy is authenticated
+                if (isAuthenticated) {
+                    onAuthenticated()
+                } else {
+                    navController.popBackStack()
+                    navController.navigate(AuthScreenItems.Login.name)
+                }
             })
         }
     }

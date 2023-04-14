@@ -24,19 +24,20 @@
             android:name=".AuthActivity"
             android:exported="true"
             android:label="@string/title_activity_create_listing"
-            android:theme="@style/Theme.MDPfrontend" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/title_activity_auth"
-            android:theme="@style/Theme.MDPfrontend"
             android:noHistory="true"
-            android:excludeFromRecents="true">
+            android:theme="@style/Theme.MDPfrontend">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_auth"
+            android:theme="@style/Theme.MDPfrontend"
+            android:excludeFromRecents="true">
         </activity>
     </application>
 
