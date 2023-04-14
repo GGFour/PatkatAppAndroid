@@ -1,5 +1,7 @@
 package com.example.mdp_frontend.domain.model
 
+import com.google.firebase.Timestamp
+
 data class Listing(
     val id: String = "",
     val pictureUrl: String = "",
@@ -12,5 +14,5 @@ data class Listing(
     val category: String? = null,
     val publisher: User? = null,
     val rating: Int = 0,
-    val publishedDate: String = ""
+    val publishedDate: Timestamp? = null,
 )

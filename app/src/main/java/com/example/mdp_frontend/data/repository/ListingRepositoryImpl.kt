@@ -5,6 +5,7 @@ import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.repository.AddListingResponse
 import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.repository.ListingsResponse
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -16,17 +17,6 @@ import javax.inject.Singleton
 class ListingRepositoryImpl @Inject constructor(
     private val listingRef: CollectionReference
     ): ListingRepository {
-//    companion object {
-//        @Volatile
-//        private var instance: ListingRepositoryImpl? = null
-//
-//        fun getInstance(
-//            listingRef: CollectionReference
-//        ) =
-//            instance ?: synchronized(this) {
-//                instance ?: ListingRepositoryImpl(listingRef).also { instance = it }
-//            }
-//    }
 
     override fun getListingsFromFirestore(): Flow<ListingsResponse> = callbackFlow {
         val snapshotListener = listingRef.orderBy("title").addSnapshotListener { snapshot, e ->
@@ -46,7 +36,11 @@ class ListingRepositoryImpl @Inject constructor(
     override suspend fun addListingToFirestore(listing: Listing): AddListingResponse {
         return try {
             val id = listingRef.document().id
-            val listingWithId = listing.copy(id = id)
+            val listingWithId = listing.copy(
+                id = id,
+                publishedDate = Timestamp.now(),
+
+            )
             listingRef.document(id).set(listingWithId)
             Response.Success(true)
         } catch (e: Exception) {
