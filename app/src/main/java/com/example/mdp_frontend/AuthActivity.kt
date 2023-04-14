@@ -1,5 +1,7 @@
 package com.example.mdp_frontend
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,17 +23,28 @@ class AuthActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    AuthScreensNavigation()
+                    AuthScreensNavigation(
+                        onAuthenticated = { startMainActivity(this) },
+                        onAuthSuccess = { startMainActivity(this) },
+                    )
                 }
             }
         }
     }
 }
 
+fun startMainActivity(current: Activity) {
+    val intent = Intent(current, MainActivity::class.java)
+    current.startActivity(intent)
+}
+
 @Preview(showBackground = true)
 @Composable
 fun AuthPreview() {
     MDPfrontendTheme {
-        AuthScreensNavigation()
+        AuthScreensNavigation(
+            onAuthSuccess = {},
+            onAuthenticated = {},
+        )
     }
 }

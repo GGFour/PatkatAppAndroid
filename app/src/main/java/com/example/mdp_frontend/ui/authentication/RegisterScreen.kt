@@ -25,6 +25,7 @@ import com.example.mdp_frontend.ui.authentication.components.*
 @Composable
 fun RegisterScreen(
     onNavTextBtnClicked: () -> Unit,
+    onRegisterSuccess: () -> Unit,
     viewModel: RegistrationViewModel = viewModel()
 ) {
     val state = viewModel.state
@@ -116,7 +117,12 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.padding(10.dp))
                 AuthGradientButton(
                     text = "Create An Account",
-                    onClick = { viewModel.onEvent(RegistrationFormEvent.Register) },
+                    onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.Register)
+                        if (viewModel.state.isDataValid) {
+                            onRegisterSuccess()  // TODO: Check if guy has really authed in firebase
+                        }
+                    },
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))

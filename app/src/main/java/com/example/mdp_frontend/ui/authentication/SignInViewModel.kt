@@ -81,6 +81,10 @@ class SignInViewModel : ViewModel() {
                 isDataValid = !hasError,
             )
             return
+        } else {
+            state = state.copy(
+                isDataValid = !hasError,
+            )
         }
     }
 

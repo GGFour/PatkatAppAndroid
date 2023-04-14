@@ -26,7 +26,11 @@ import com.example.mdp_frontend.ui.authentication.components.AuthPasswordInput
 import com.example.mdp_frontend.ui.authentication.components.AuthTextButton
 
 @Composable
-fun LoginScreen(onNavTextBtnClicked: () -> Unit, viewModel: SignInViewModel = viewModel()) {
+fun LoginScreen(
+    onNavTextBtnClicked: () -> Unit,
+    onLoginSuccess: () -> Unit,
+    viewModel: SignInViewModel = viewModel()
+) {
     val state = viewModel.state
 
     Box(
@@ -85,6 +89,9 @@ fun LoginScreen(onNavTextBtnClicked: () -> Unit, viewModel: SignInViewModel = vi
                     text = "Login",
                     onClick = {
                         viewModel.onEvent(SigninFormEvent.Signin)
+                        if (viewModel.state.isDataValid) {
+                            onLoginSuccess()  // TODO: Check if guy has really authed in firebase
+                        }
                     },
                 )
 

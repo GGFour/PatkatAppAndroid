@@ -135,6 +135,10 @@ class RegistrationViewModel : ViewModel() {
                 isDataValid = !hasError,
             )
             return
+        } else {
+            state = state.copy(
+                isDataValid = !hasError,
+            )
         }
         viewModelScope.launch {
             validationEventChannel.send(ValidationEvent.Success)

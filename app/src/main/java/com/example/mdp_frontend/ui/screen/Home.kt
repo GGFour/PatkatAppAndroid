@@ -27,7 +27,8 @@ import com.example.mdp_frontend.ui.theme.*
 fun HomeScreen(
     modifier: Modifier,
     onViewCategoriesClick: () -> Unit,
-    onViewListingCardClick: () -> Unit
+    onViewListingCardClick: () -> Unit,
+    onCreateListingClick: () -> Unit,
 ) {
     //Home Screen body
     Box(
@@ -38,6 +39,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(30.dp))
             SearchBar()
             CreateProfile(onCreateProfileClick = { /*TODO*/ })
+            CreateListing(onCreateListingClick = onCreateListingClick)
             FeaturedItems(
 
                 //sample test, will be change once we have the database set up
@@ -99,6 +101,47 @@ fun SearchBar(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun CreateListing(onCreateListingClick: () -> Unit,
+                  color: Color = md_theme_light_tertiary
+) {
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(15.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color)
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+                .fillMaxWidth()
+        ){
+            Column(
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Have a work to do?",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+                Text(
+                    text = "Create a task and get a service!",
+                    color = md_theme_light_tertiaryContainer,
+                    fontSize = 16.sp
+                )
+                Button(
+                    onClick = {onCreateListingClick()}
+                ){
+                    Text(text = "Create")
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun CreateProfile(onCreateProfileClick: () -> Unit,
     color: Color = md_theme_light_tertiary
 ) {
@@ -146,7 +189,8 @@ fun FeaturedItems(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     horizontal = 15.dp, vertical = 20.dp
                 ),

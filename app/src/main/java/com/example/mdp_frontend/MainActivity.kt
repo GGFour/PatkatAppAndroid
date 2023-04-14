@@ -1,5 +1,7 @@
 package com.example.mdp_frontend
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +31,7 @@ import com.example.mdp_frontend.ui.components.BottomNavigationBar
 import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.screen.subscreen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
+import io.grpc.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +89,7 @@ fun App() {
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier) {
+    val context = LocalContext.current as Activity
     NavHost(navController = navController, startDestination = MainScreen.Splash.name) {
         composable(MainScreen.Splash.name) {
             Splash(onAnimationFinish = {
@@ -98,6 +102,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                 modifier,
                 onViewCategoriesClick = { navController.navigate(MainScreen.AllCategories.name) },
                 onViewListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
+                onCreateListingClick = {
+                   val intent = Intent(context, CreateListingActivity::class.java)
+                    context.startActivity(intent)
+                },
             )
         }
         composable(MainScreen.Map.name) {
