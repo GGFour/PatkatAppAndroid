@@ -95,7 +95,7 @@ fun CreateListingScreen (
                 }
                 composable(CreateListing.Photo.name) {
                     SelectPictureScreen(
-                        selectedPicture = uiState.value.pictureUri,
+                        selectedPicture = Uri.parse(uiState.value.pictureUri),
                         updatePicture = { viewModel.updateImageUri(it) },
                         onNextPressed = { navController.navigate(CreateListing.Price.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },

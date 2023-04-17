@@ -1,4 +1,4 @@
-package com.example.mdp_frontend.domain.use_case
+package com.example.mdp_frontend.domain.use_case.listing
 
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.repository.ListingRepository

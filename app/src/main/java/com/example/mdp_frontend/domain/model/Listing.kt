@@ -14,7 +14,7 @@ enum class ListingState {
 data class Listing(
     val id: String = "",
     val pictureUrl: String = "",
-    val pictureUri: Uri? = null,
+    val pictureUri: String? = null,
     val title: String = "",
     val description: String = "",
     val priceStr: String = "",

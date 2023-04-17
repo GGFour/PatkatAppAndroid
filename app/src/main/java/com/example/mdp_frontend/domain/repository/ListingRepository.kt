@@ -5,7 +5,7 @@ import com.example.mdp_frontend.domain.model.Response
 import kotlinx.coroutines.flow.Flow
 
 typealias Listings = List<Listing>
-typealias ListingsResponse = Response<Listing>
+typealias ListingsResponse = Response<Listings>
 typealias AddListingResponse = Response<Boolean>
 
 interface ListingRepository {

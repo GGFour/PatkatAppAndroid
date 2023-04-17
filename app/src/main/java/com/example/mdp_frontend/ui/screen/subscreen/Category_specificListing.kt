@@ -10,8 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.mdp_frontend.domain.use_case.getListings
-import com.example.mdp_frontend.domain.use_case.Listings
+import com.example.mdp_frontend.domain.use_case.listing.getListings
+import com.example.mdp_frontend.domain.use_case.listing.Listings
 import com.example.mdp_frontend.model.ListingCardItem
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
