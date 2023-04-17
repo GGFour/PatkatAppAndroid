@@ -1,5 +1,7 @@
 package com.example.mdp_frontend.ui.authentication
 
+import android.content.ContentValues
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +24,8 @@ import com.example.mdp_frontend.domain.model.Resource
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.ui.authentication.components.*
 import com.example.mdp_frontend.viewmodel.AuthViewModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 @Composable
@@ -165,6 +169,22 @@ fun RegisterScreen(
                 is Resource.Success -> {
                     LaunchedEffect(Unit){
                         onRegisterSuccess()
+
+                        // Add code here to store user data in Firestore
+                        val user = hashMapOf(
+                            "name" to state.name,
+                            "email" to state.email
+                        )
+
+                        val db = Firebase.firestore
+                        db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "Error adding document", e)
+                            }
                     }
 
 

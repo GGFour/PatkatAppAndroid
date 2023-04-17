@@ -1,11 +1,11 @@
 package com.example.mdp_frontend.data.repository
 
-import com.example.mdp_frontend.data.utils.await
 import com.example.mdp_frontend.domain.model.Resource
 import com.example.mdp_frontend.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
