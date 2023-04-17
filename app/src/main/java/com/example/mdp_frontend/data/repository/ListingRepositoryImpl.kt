@@ -1,5 +1,6 @@
 package com.example.mdp_frontend.data.repository
 
+import com.example.mdp_frontend.depin.ListingCollectionReference
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.repository.AddListingResponse
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ListingRepositoryImpl @Inject constructor(
-    private val listingRef: CollectionReference
+    @ListingCollectionReference private val listingRef: CollectionReference
     ): ListingRepository {
 
     override fun getListingsFromFirestore(): Flow<ListingsResponse> = callbackFlow {

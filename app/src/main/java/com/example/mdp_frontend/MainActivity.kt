@@ -1,6 +1,5 @@
 package com.example.mdp_frontend
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -21,7 +20,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -29,14 +27,13 @@ import androidx.navigation.compose.composable
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.User
 import com.example.mdp_frontend.model.NavTabItem
+import com.example.mdp_frontend.ui.all_categories.AllCategories
 import com.example.mdp_frontend.ui.components.BottomNavigationBar
 import com.example.mdp_frontend.ui.screen.*
 import com.example.mdp_frontend.ui.screen.subscreen.*
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 
-import com.example.mdp_frontend.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.grpc.Context
 
 
 @AndroidEntryPoint
@@ -92,12 +89,10 @@ fun App() {
     }
 }
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current as Activity
-        NavHost(navController = navController, startDestination = MainScreen.Home.name) {
-
+    NavHost(navController = navController, startDestination = MainScreen.Home.name) {
         composable(MainScreen.Home.name) {
             HomeScreen(
                 modifier,
@@ -128,8 +123,8 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         }
         composable(MainScreen.AllCategories.name) {
             AllCategories(
-            onNavUp = { navController.navigateUp() },
-            onCategoryBoxChecked = { navController.navigate(MainScreen.CategorySpecific.name)}
+                onNavUp = { navController.navigateUp() },
+                onCategoryBoxChecked = { navController.navigate(MainScreen.CategorySpecific.name) }
             )
         }
         composable(MainScreen.CategorySpecific.name) {
@@ -162,7 +157,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
 
         //navigation for profile sub-screens
         composable(MainScreen.PersonalInfo.name) {
-            PersonalInfo( onNavUp = { navController.navigateUp() },)
+            PersonalInfo( onNavUp = { navController.navigateUp() })
         }
         composable(MainScreen.Notifications.name) {
             Notifications( onNavUp = { navController.navigateUp() })

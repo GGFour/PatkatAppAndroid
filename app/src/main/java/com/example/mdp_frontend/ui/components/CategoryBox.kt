@@ -11,16 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.mdp_frontend.R
-import com.example.mdp_frontend.model.CategoryBoxItem
+import coil.compose.AsyncImage
+import com.example.mdp_frontend.domain.model.Category
 import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
 
 
 @Composable
-fun CategoryBox(categoryBoxItem: CategoryBoxItem,
+fun CategoryBox(category: Category,
                 modifier: Modifier = Modifier,
                 onClick: () -> Unit
 ) {
@@ -39,13 +39,13 @@ fun CategoryBox(categoryBoxItem: CategoryBoxItem,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(id = categoryBoxItem.imageResId),
+            AsyncImage(
+                model = if (category.imageResId != null) painterResource(id = category.imageResId) else null,
                 contentDescription = null,
                 modifier = Modifier.size(100.dp)
             )
             Text(
-                text = categoryBoxItem.name,
+                text = category.name,
                 style = typography.titleSmall,
                 modifier = Modifier.padding(top = 8.dp)
             )

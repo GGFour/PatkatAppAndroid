@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.repository.AddListingResponse
-import com.example.mdp_frontend.domain.use_case.UseCases
+import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateListingFormViewModel @Inject constructor(
-    private val useCases: UseCases
+    private val listingUseCases: ListingUseCases
 ): ViewModel() {
     private val _uiState = MutableStateFlow(Listing())
     val uiState: StateFlow<Listing> = _uiState.asStateFlow()
@@ -57,14 +57,14 @@ class CreateListingFormViewModel @Inject constructor(
     fun updateImageUri(newUri: Uri?) {
         _uiState.update { currentState ->
             currentState.copy(
-                pictureUri = newUri,
+                pictureUri = newUri.toString(),
             )
         }
     }
 
     fun addListing() = viewModelScope.launch {
         addListingResponse = Response.Loading
-        addListingResponse = useCases.addListing(uiState.value)
+        addListingResponse = listingUseCases.addListing(uiState.value)
     }
 
     fun reset() {

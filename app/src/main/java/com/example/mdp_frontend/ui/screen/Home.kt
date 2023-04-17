@@ -19,8 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.mdp_frontend.domain.use_case.getListings
-import com.example.mdp_frontend.domain.use_case.Listings
+import com.example.mdp_frontend.domain.use_case.listing.getListings
+import com.example.mdp_frontend.domain.use_case.listing.Listings
 import com.example.mdp_frontend.model.ListingCardItem
 import com.example.mdp_frontend.ui.theme.*
 
