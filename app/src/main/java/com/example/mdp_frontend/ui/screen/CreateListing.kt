@@ -4,20 +4,25 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EuroSymbol
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,8 +30,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mdp_frontend.R
+import com.example.mdp_frontend.domain.model.Category
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.Response
+import com.example.mdp_frontend.domain.repository.CategoriesResponse
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
 
@@ -88,14 +95,23 @@ fun CreateListingScreen (
                     WriteDescriptionScreen(
                         value= uiState.value.description,
                         onValueChanged = {viewModel.updateDescription(it)},
-                        onNextPressed = { navController.navigate(CreateListing.Photo.name) },
+                        onNextPressed = { navController.navigate(CreateListing.Category.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
                         title = stringResource(id = currentScreen.title),
                     )
                 }
+                composable(CreateListing.Category.name) {
+                    PickCategoryScreen(
+                        category = uiState.value.category,
+                        updateCategory = { viewModel.updateCategory(it) },
+                        categoriesResponse = viewModel.categoriesResponse,
+                        onNextPressed = { navController.navigate(CreateListing.Photo.name) },
+                        onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) }
+                    )
+                }
                 composable(CreateListing.Photo.name) {
                     SelectPictureScreen(
-                        selectedPicture = Uri.parse(uiState.value.pictureUri),
+                        selectedPicture = if (uiState.value.pictureUri != null) Uri.parse(uiState.value.pictureUri) else null,
                         updatePicture = { viewModel.updateImageUri(it) },
                         onNextPressed = { navController.navigate(CreateListing.Price.name) },
                         onCancelPressed = { cancelAndNavigateToStart(viewModel, navController) },
@@ -113,7 +129,6 @@ fun CreateListingScreen (
             //  TODO:
             //  upload listing photo
             //  composable(CreateListing.Location.name) {}
-            //  composable(CreateListing.Category.name) {}
                 composable(CreateListing.Review.name) {
                     ReviewListingScreen(
                         listing = uiState.value,
@@ -255,6 +270,54 @@ private fun SelectPictureScreen(
                     Text(text = "Select Image")
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PickCategoryScreen(
+    category: String?,
+    updateCategory: (String?) -> Unit,
+    categoriesResponse: CategoriesResponse,
+    onNextPressed: () -> Unit,
+    onCancelPressed: () -> Unit,
+) {
+    ListingScreenContainer(onNextPressed = onNextPressed, onCancelPressed = onCancelPressed) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            var expanded by remember { mutableStateOf(false) }
+            when (categoriesResponse) {
+                is Response.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+                is Response.Success -> {
+                    TextButton(
+                        onClick = { expanded = true},
+                    ) {
+                        Text(category ?: "Select the category")
+                        Icon(
+                            imageVector = if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                            contentDescription = if (expanded) "collapse" else "expand",
+                        )
+                    }
+                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                        categoriesResponse.data.forEach { category: Category ->
+                            DropdownMenuItem(text = { Text(category.name) }, onClick = {
+                                updateCategory(category.name)
+                                expanded = false
+                            })
+                        }
+                    }
+                }
+                is Response.Failure -> {
+                    Text("Smth went wrong. . .")
+                }
+            }
+
         }
     }
 }
