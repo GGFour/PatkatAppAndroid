@@ -172,7 +172,7 @@ fun RegisterScreen(
                         // Add code here to store user data in Firestore
                         val user = hashMapOf(
                             "name" to state.name,
-                            "email" to state.email
+                            "email" to state.email,
                         )
 
                         val db = Firebase.firestore

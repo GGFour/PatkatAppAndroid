@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.mdp_frontend.domain.use_case.listing.getListings
-import com.example.mdp_frontend.domain.use_case.listing.Listings
+import com.example.mdp_frontend.ui.components.Listings
 import com.example.mdp_frontend.model.ListingCardItem
 import com.example.mdp_frontend.ui.theme.*
 
@@ -31,7 +31,7 @@ import com.example.mdp_frontend.ui.theme.*
 fun HomeScreen(
     modifier: Modifier,
     onViewCategoriesClick: () -> Unit,
-    onViewListingCardClick: () -> Unit,
+    onViewListingCardClick: (String) -> Unit,
     onCreateListingClick: () -> Unit,
     context: Context
 ) {
@@ -63,7 +63,9 @@ fun HomeScreen(
                 )
                 Listings(
                     listings = listings.value,
-                    onListingCardClick = onViewListingCardClick
+                    onListingCardClick =  { listingId ->
+                        onViewListingCardClick(listingId)
+                    }
                 )
             }
         }

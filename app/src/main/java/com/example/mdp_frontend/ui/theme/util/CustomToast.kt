@@ -1,4 +1,4 @@
-package com.example.mdp_frontend.util
+package com.example.mdp_frontend.ui.theme.util
 
 import android.content.Context
 import android.widget.Toast

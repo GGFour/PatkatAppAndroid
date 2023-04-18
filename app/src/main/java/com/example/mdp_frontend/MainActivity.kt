@@ -21,11 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import com.example.mdp_frontend.domain.model.Listing
-import com.example.mdp_frontend.domain.model.User
+import androidx.navigation.navArgument
 import com.example.mdp_frontend.model.NavTabItem
 import com.example.mdp_frontend.ui.all_categories.AllCategories
 import com.example.mdp_frontend.ui.components.BottomNavigationBar
@@ -97,7 +97,9 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
             HomeScreen(
                 modifier,
                 onViewCategoriesClick = { navController.navigate(MainScreen.AllCategories.name) },
-                onViewListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
+                onViewListingCardClick = { listingId ->
+                    navController.navigate("ListingDetails/$listingId")
+                },
                 onCreateListingClick = {
                    val intent = Intent(context, CreateListingActivity::class.java)
                     context.startActivity(intent)
@@ -131,12 +133,14 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
             Category_specificListing(
                 modifier,
                 onNavUp = { navController.navigateUp() },
-                onListingCardClick = { navController.navigate(MainScreen.ListingDetails.name)},
+                onListingCardClick = { listingId ->
+                    // Navigate to the ListingDetails destination here
+                    navController.navigate("ListingDetails/$listingId")
+                },
                 context = LocalContext.current,
-
             )
         }
-
+        /*
          composable(MainScreen.ListingDetails.name) {
                  ListingDetailScreen(
                      Listing(
@@ -155,6 +159,20 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                  onNavUp = { navController.navigateUp()}
          ) }
 
+         */
+
+        //new
+        composable(
+            route = "ListingDetails/{listingId}",
+            arguments = listOf(navArgument("listingId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val listingId = backStackEntry.arguments?.getString("listingId")
+            ListingDetailScreen(
+                listingId = listingId,
+                onNavUp = { navController.navigateUp() }
+            )
+        }
+
         //navigation for profile sub-screens
         composable(MainScreen.PersonalInfo.name) {
             PersonalInfo( onNavUp = { navController.navigateUp() })
@@ -166,10 +184,11 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         composable(MainScreen.MyServices.name) {
             MyServices( onNavUp = { navController.navigateUp() })
         }
-             */
+
         composable(MainScreen.MyTasks.name) {
             MyTasks( onNavUp = { navController.navigateUp() })
         }
+             */
 
 
 
