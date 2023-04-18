@@ -9,23 +9,36 @@ import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.repository.AddListingResponse
+import com.example.mdp_frontend.domain.repository.CategoriesResponse
+import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateListingFormViewModel @Inject constructor(
-    private val listingUseCases: ListingUseCases
+    private val listingUseCases: ListingUseCases,
+    private val categoriesUseCases: CategoriesUseCases,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(Listing())
     val uiState: StateFlow<Listing> = _uiState.asStateFlow()
     var addListingResponse by mutableStateOf<AddListingResponse>(Response.Success(false))
         private set
+
+    var categoriesResponse by mutableStateOf<CategoriesResponse>(Response.Loading)
+        private set
+
+    init {
+        getCategories()
+    }
+
+    private fun getCategories() = viewModelScope.launch {
+        categoriesUseCases.getCategories().collect {response ->
+            categoriesResponse = response
+        }
+    }
 
     fun updateTitle(title: String) {
         _uiState.update { currentState ->
@@ -58,6 +71,14 @@ class CreateListingFormViewModel @Inject constructor(
         _uiState.update { currentState ->
             currentState.copy(
                 pictureUri = newUri.toString(),
+            )
+        }
+    }
+
+    fun updateCategory(newCategory: String?) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                category = newCategory,
             )
         }
     }
