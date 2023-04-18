@@ -24,7 +24,7 @@ fun getListings(
             snapshot.documents.mapNotNullTo(listings) { document ->
                 document.toObject(Listing::class.java)?.let { listing ->
                     val address = if (listing.latitude != null && listing.longitude != null) {
-                        getAddressFromLocation(listing.latitude, listing.longitude, context)
+                        getAddressFromLocation(listing.latitude.toFloat(), listing.longitude.toFloat(), context)
                     } else {
                         "Error: Invalid location"
                     }

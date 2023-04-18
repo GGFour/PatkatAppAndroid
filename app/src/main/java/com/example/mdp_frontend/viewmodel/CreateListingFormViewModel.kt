@@ -58,10 +58,16 @@ class CreateListingFormViewModel @Inject constructor(
         }
     }
 
-    fun updateCoordinates(lat: Float, long: Float) {
+    fun updateLatitude(lat: Double) {
         _uiState.update { currentState ->
             currentState.copy(
                 latitude = lat,
+            )
+        }
+    }
+    fun updateLongitude(long: Double) {
+        _uiState.update { currentState ->
+            currentState.copy(
                 longitude = long,
             )
         }
