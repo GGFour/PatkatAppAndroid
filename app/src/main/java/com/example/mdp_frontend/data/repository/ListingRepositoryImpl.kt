@@ -11,6 +11,7 @@ import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,7 +26,7 @@ class ListingRepositoryImpl @Inject constructor(
                 val listings = snapshot.toObjects(Listing::class.java)
                 Response.Success(listings)
             } else {
-                Response.Failure(e)
+                e?.let { Response.Failure(it) }
             } as ListingsResponse
             trySend(listingsResponse)
         }
@@ -47,5 +48,10 @@ class ListingRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Response.Failure(e)
         }
+    }
+
+    override suspend fun getListingById(id: String): Listing {
+        val document = listingRef.document(id).get().await()
+        return document.toObject(Listing::class.java)!!
     }
 }

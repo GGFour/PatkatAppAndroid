@@ -23,7 +23,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 val categories = snapshot.toObjects(Category::class.java)
                 Response.Success(categories)
             } else {
-                Response.Failure(e)
+                e?.let { Response.Failure(it) }
             } as CategoriesResponse
             trySend(categoryResponse)
         }

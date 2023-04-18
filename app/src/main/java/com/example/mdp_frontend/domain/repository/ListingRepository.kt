@@ -12,4 +12,7 @@ interface ListingRepository {
     fun getListingsFromFirestore(): Flow<ListingsResponse>
 
     suspend fun addListingToFirestore(listing: Listing): AddListingResponse
+
+    //suspend fun getListingById(listingId: String?): Listing?
+    suspend fun getListingById(listingId: String): Listing
 }

@@ -32,6 +32,7 @@ fun getListings(
                         title = listing.title,
                         category = listing.category ?: "",
                         location = address,
+                        id = listing.id,
                         date = listing.publishedDate
                     )
                 }

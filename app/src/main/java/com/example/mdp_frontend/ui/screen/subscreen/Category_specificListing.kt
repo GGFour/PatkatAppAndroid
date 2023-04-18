@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.mdp_frontend.domain.use_case.listing.getListings
-import com.example.mdp_frontend.domain.use_case.listing.Listings
+import com.example.mdp_frontend.ui.components.Listings
 import com.example.mdp_frontend.model.ListingCardItem
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
@@ -20,7 +20,7 @@ import com.example.mdp_frontend.ui.components.TopBar
 fun Category_specificListing(
     modifier: Modifier,
     onNavUp: () -> Unit,
-    onListingCardClick: () -> Unit,
+    onListingCardClick: (String) -> Unit,
     context: Context
 ) {
     val listings = remember { mutableStateOf<List<ListingCardItem>>(emptyList()) }
@@ -48,7 +48,9 @@ fun Category_specificListing(
 
             Listings(
                 listings = listings.value,
-                onListingCardClick = onListingCardClick
+                onListingCardClick = { listingId ->
+                    onListingCardClick(listingId)
+                }
             )
         }
     }

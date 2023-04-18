@@ -8,6 +8,7 @@ import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.category.GetCategories
 import com.example.mdp_frontend.domain.use_case.listing.AddListing
+import com.example.mdp_frontend.domain.use_case.listing.GetListingById
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
 import com.example.mdp_frontend.domain.use_case.user.*
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,7 @@ object AppModule {
         repo: ListingRepository
     ) = ListingUseCases(
         addListing = AddListing(repo),
+        getListingById = GetListingById(repo)
     )
 
     @Provides

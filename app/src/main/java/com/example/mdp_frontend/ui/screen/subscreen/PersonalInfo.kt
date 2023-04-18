@@ -25,33 +25,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
-import com.example.mdp_frontend.model.TopBarItem
-import com.example.mdp_frontend.ui.components.TopBar
+import coil.compose.AsyncImage
 import com.example.mdp_frontend.ui.authentication.AuthViewModel
+import com.example.mdp_frontend.ui.components.SubscreenHeader
 import com.example.mdp_frontend.AuthActivity
 
 
 @Composable
 fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(),onNavUp: () -> Unit) {
     val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
 
-    ) {
-        TopBar(model = TopBarItem(
-            title = "Personal Info ",
-            onNavUpPressed = onNavUp
-        )
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+    SubscreenHeader(title = "Personal Info", onNavUp = onNavUp) {
+    Spacer(modifier = Modifier.height(16.dp))
         // Use CircleAvatar to display the profile picture with a border and a placeholder image
-        Image(
-            painter = rememberImagePainter(viewModel?.currentUser?.photoUrl),
+        AsyncImage(
+            // painter = rememberAsyncImagePainter(viewModel?.currentUser?.photoUrl),
+            model = "https://sp-images.summitpost.org/947006.jpg?auto=format&fit=max&ixlib=php-2.1.1&q=35&w=1024&s=d877834568578388ef13b78e3cd7ba2b",
             contentDescription = "Profile picture",
             modifier = Modifier
                 .size(80.dp)
