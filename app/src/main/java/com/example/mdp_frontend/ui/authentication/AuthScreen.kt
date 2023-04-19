@@ -42,8 +42,7 @@ fun AuthScreensNavigation(
         }
         composable(route = AuthScreenItems.Splash.name) {
             Splash(onAnimationFinish = {
-                val isAuthenticated = false  // TODO: Check if guy is authenticated
-                if (isAuthenticated) {
+                if (viewModel.authenticated) {
                     onAuthenticated()
                 } else {
                     navController.popBackStack()
