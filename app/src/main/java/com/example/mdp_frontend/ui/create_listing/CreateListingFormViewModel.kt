@@ -1,4 +1,4 @@
-package com.example.mdp_frontend.viewmodel
+package com.example.mdp_frontend.ui.create_listing
 
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
