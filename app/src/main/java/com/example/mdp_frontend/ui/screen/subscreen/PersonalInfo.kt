@@ -1,5 +1,8 @@
 package com.example.mdp_frontend.ui.screen.subscreen
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -17,17 +20,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
 import com.example.mdp_frontend.ui.authentication.AuthViewModel
+import com.example.mdp_frontend.AuthActivity
 
 
 @Composable
-fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(), onNavUp: () -> Unit) {
+fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(),onNavUp: () -> Unit) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,8 +87,8 @@ fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(), onNavUp: () -> Unit
         Button(
             onClick = {
                 viewModel?.logout()
-                // navigate to login screen
-                // TODO navigate to login screen or launch AuthActivity
+                // launch AuthActivity
+                startAuthActivity(context)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,4 +104,13 @@ fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(), onNavUp: () -> Unit
             Text(text = "Logout")
         }
     }
+}
+
+fun startAuthActivity(context: Context) {
+    val intent = Intent(context, AuthActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+    ContextCompat.startActivity(context, intent, null)
+    //disable onBackPressed button
+    (context as? Activity)?.finishAffinity()
 }
