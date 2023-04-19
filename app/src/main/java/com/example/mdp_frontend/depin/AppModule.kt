@@ -9,6 +9,7 @@ import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.category.GetCategories
 import com.example.mdp_frontend.domain.use_case.listing.AddListing
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
+import com.example.mdp_frontend.domain.use_case.user.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
@@ -71,4 +72,14 @@ object AppModule {
 
     @Provides
     fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
+
+    @Provides
+    fun provideUserUseCases(
+        repo: AuthRepository
+    ) = UserUseCases(
+        currentUser = CurrentUser(repo),
+        login = Login(repo),
+        register = Register(repo),
+        logout = Logout(repo),
+    )
 }

@@ -1,14 +1,10 @@
-package com.example.mdp_frontend.viewmodel
+package com.example.mdp_frontend.ui.authentication
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Resource
-import com.example.mdp_frontend.domain.repository.AuthRepository
+import com.example.mdp_frontend.domain.use_case.user.UserUseCases
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repository: AuthRepository
-): ViewModel() {
+    private val useCases: UserUseCases,
+) : ViewModel() {
 
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val loginFlow: StateFlow<Resource<FirebaseUser>?> = _loginFlow
@@ -27,29 +23,29 @@ class AuthViewModel @Inject constructor(
     val registerFlow: StateFlow<Resource<FirebaseUser>?> = _registerFlow
 
     val currentUser: FirebaseUser?
-        get() = repository.currentUser
+        get() = useCases.currentUser()
 
     init {
-        if (repository.currentUser != null) {
-            _loginFlow.value = Resource.Success(repository.currentUser!!)
+        if (useCases.currentUser() != null) {
+            _loginFlow.value = Resource.Success(useCases.currentUser()!!)
         }
     }
 
     fun login(email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading
-        val result = repository.login(email, password)
+        val result = useCases.login(email, password)
         _loginFlow.value = result
 
     }
 
     fun register(name: String, email: String, password: String) = viewModelScope.launch {
         _registerFlow.value = Resource.Loading
-        val result = repository.register(name, email, password)
+        val result = useCases.register(name, email, password)
         _registerFlow.value = result
     }
 
     fun logout() {
-        repository.logout()
+        useCases.logout()
         _loginFlow.value = null
         _registerFlow.value = null
     }

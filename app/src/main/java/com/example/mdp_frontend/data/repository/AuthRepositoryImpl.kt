@@ -22,13 +22,18 @@ class AuthRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Resource.Error(e)
         }
-
     }
 
-    override suspend fun register(name: String, email: String, password: String,): Resource<FirebaseUser> {
+    override suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+    ): Resource<FirebaseUser> {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())?.await()
+            result?.user?.updateProfile(
+                UserProfileChangeRequest.Builder().setDisplayName(name).build()
+            )?.await()
             Resource.Success(result.user!!)
         } catch (e: Exception) {
             e.printStackTrace()

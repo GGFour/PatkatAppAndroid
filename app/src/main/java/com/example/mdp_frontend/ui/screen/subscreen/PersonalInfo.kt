@@ -23,11 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.TopBar
-import com.example.mdp_frontend.viewmodel.AuthViewModel
+import com.example.mdp_frontend.ui.authentication.AuthViewModel
 
 
 @Composable
-fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(),onNavUp: () -> Unit) {
+fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(), onNavUp: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
