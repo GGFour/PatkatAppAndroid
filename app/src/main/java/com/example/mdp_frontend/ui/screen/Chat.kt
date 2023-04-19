@@ -26,7 +26,7 @@ fun ChatScreen(modifier: Modifier) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp).
-            background(md_theme_light_background)
+            background(MaterialTheme.colorScheme.background)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Text(

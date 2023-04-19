@@ -1,6 +1,7 @@
 package com.example.mdp_frontend.ui.all_categories
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,6 +17,7 @@ import com.example.mdp_frontend.domain.repository.Categories
 import com.example.mdp_frontend.model.TopBarItem
 import com.example.mdp_frontend.ui.components.CategoryBox
 import com.example.mdp_frontend.ui.components.TopBar
+import com.example.mdp_frontend.ui.theme.md_theme_dark_background
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
@@ -25,7 +27,7 @@ fun AllCategories(
     viewModel: AllCategoriesViewModel = hiltViewModel(),
 ) {
     Column(modifier = Modifier.
-    background(md_theme_light_background))
+    background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background))
     {
         TopBar(model = TopBarItem(
             title = "All Categories",

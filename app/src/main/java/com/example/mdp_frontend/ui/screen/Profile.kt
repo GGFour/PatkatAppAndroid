@@ -3,6 +3,7 @@ package com.example.mdp_frontend.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mdp_frontend.ui.theme.md_theme_dark_background
 import com.example.mdp_frontend.ui.theme.md_theme_light_background
 
 @Composable
@@ -28,7 +30,7 @@ fun ProfileScreen(
 ) {
     LazyColumn(modifier = Modifier
         .fillMaxSize()
-        .background(md_theme_light_background),
+        .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background),
         contentPadding = PaddingValues(top = 16.dp)) {
         item {
             ProfileHeader(name = "John Doe")

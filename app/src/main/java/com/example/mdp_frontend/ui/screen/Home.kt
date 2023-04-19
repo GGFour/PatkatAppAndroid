@@ -75,7 +75,7 @@ fun SearchBar(modifier: Modifier = Modifier) {
             .padding(
                 horizontal = 15.dp, vertical = 20.dp
             )
-            .background(Color.LightGray, RoundedCornerShape(28.dp))
+            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(28.dp))
             .clip(RoundedCornerShape(10.dp))
     ) {
         Row(
@@ -86,6 +86,7 @@ fun SearchBar(modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -95,7 +96,7 @@ fun SearchBar(modifier: Modifier = Modifier) {
 @Composable
 fun CreateListing(
     onCreateListingClick: () -> Unit,
-    color: Color = md_theme_light_tertiary
+    color: Color = MaterialTheme.colorScheme.tertiaryContainer
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth()

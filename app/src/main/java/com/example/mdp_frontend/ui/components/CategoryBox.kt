@@ -3,8 +3,10 @@ package com.example.mdp_frontend.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.mdp_frontend.domain.model.Category
+import com.example.mdp_frontend.ui.theme.md_theme_dark_background
+import com.example.mdp_frontend.ui.theme.md_theme_dark_tertiaryContainer
 import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
 
 
@@ -28,14 +32,17 @@ fun CategoryBox(category: Category,
         modifier = Modifier
             .size(150.dp)
             .background(
-                color = md_theme_light_tertiaryContainer,
-                shape = RoundedCornerShape(20.dp)
+//                color = if (isSystemInDarkTheme()) md_theme_dark_tertiaryContainer else md_theme_light_tertiaryContainer,
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = RoundedCornerShape (20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
