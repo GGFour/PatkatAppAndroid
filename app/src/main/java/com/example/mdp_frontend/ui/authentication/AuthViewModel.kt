@@ -1,5 +1,9 @@
 package com.example.mdp_frontend.ui.authentication
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Resource
@@ -22,11 +26,14 @@ class AuthViewModel @Inject constructor(
     private val _registerFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val registerFlow: StateFlow<Resource<FirebaseUser>?> = _registerFlow
 
+    var authenticated by mutableStateOf(false)
+
     val currentUser: FirebaseUser?
         get() = useCases.currentUser()
 
     init {
         if (useCases.currentUser() != null) {
+            authenticated = true
             _loginFlow.value = Resource.Success(useCases.currentUser()!!)
         }
     }

@@ -122,8 +122,6 @@ fun LoginScreen(
                 }
                 is Resource.Success -> {
                     LaunchedEffect(Unit){onLoginSuccess()}
-
-
                 }
             }
         }
