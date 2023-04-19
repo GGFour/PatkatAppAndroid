@@ -27,13 +27,13 @@ fun Splash(onAnimationFinish: () -> Unit) {
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 3000
+            durationMillis = 1500
         )
     )
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(4000)
+        delay(1500)
         onAnimationFinish()
     }
     SplashScreen(alpha = alphaAnim.value)
