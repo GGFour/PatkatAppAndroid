@@ -1,5 +1,6 @@
 package com.example.mdp_frontend.ui.screen
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -8,6 +9,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -43,7 +45,8 @@ fun Splash(onAnimationFinish: () -> Unit) {
 fun SplashScreen(alpha: Float) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(modifier = Modifier
-            .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background)
+//            .background(if (isSystemInDarkTheme()) md_theme_dark_background else md_theme_light_background)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
@@ -64,7 +67,6 @@ fun SplashScreen(alpha: Float) {
 @Preview
 fun SplashScreenPreview(){
    SplashScreen(alpha = 1f)
-
 }
 
 
