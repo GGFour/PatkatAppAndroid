@@ -1,5 +1,7 @@
 package com.example.mdp_frontend.ui.authentication
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.model.RegistrationFormState
 import com.example.mdp_frontend.model.ValidationResult
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -143,6 +147,7 @@ class RegistrationViewModel : ViewModel() {
         }
         viewModelScope.launch {
             validationEventChannel.send(ValidationEvent.Success)
+
         }
     }
 
