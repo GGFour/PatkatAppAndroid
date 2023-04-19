@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.mdp_frontend.model.Status
+import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.model.TaskServiceRowItem
 
 @Composable
@@ -37,15 +37,19 @@ fun TaskServiceRow(service: TaskServiceRowItem) {
         ) {
             Icon(
                 imageVector = when (service.status) {
-                    Status.Active -> Icons.Filled.CheckCircle
-                    Status.InProgress -> Icons.Filled.Schedule
-                    Status.Finished -> Icons.Filled.Cancel
+                    ListingState.Active -> Icons.Filled.CheckCircle
+                    ListingState.WIP -> Icons.Filled.Schedule
+                    ListingState.Finished -> Icons.Filled.Cancel
+                    ListingState.Noticed -> TODO()
+                    ListingState.Abandoned -> TODO()
                 },
                 contentDescription = null,
                 tint = when (service.status) {
-                    Status.Active -> colorScheme.primary
-                    Status.InProgress -> colorScheme.secondary
-                    Status.Finished -> colorScheme.error
+                    ListingState.Active -> colorScheme.primary
+                    ListingState.WIP -> colorScheme.secondary
+                    ListingState.Finished -> colorScheme.error
+                    ListingState.Noticed -> TODO()
+                    ListingState.Abandoned -> TODO()
                 }
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -78,7 +82,7 @@ fun TaskServiceRow(service: TaskServiceRowItem) {
 fun TaskServiceRowPreview() {
     val service = TaskServiceRowItem(
         name = "Example Service",
-        status = Status.Active,
+        status = ListingState.Active,
         price = 100
     )
     TaskServiceRow(service = service)

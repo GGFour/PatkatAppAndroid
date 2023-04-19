@@ -180,11 +180,11 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         composable(MainScreen.Notifications.name) {
             Notifications( onNavUp = { navController.navigateUp() })
         }
-            /*
+
         composable(MainScreen.MyServices.name) {
             MyServices( onNavUp = { navController.navigateUp() })
         }
-
+/*
         composable(MainScreen.MyTasks.name) {
             MyTasks( onNavUp = { navController.navigateUp() })
         }

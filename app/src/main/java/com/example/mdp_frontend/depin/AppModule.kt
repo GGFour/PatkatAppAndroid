@@ -77,7 +77,7 @@ object AppModule {
     @Provides
     fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
 
-<<<<<<< HEAD
+
     @Provides
     fun provideUserUseCases(
         repo: AuthRepository
@@ -87,6 +87,4 @@ object AppModule {
         register = Register(repo),
         logout = Logout(repo),
     )
-=======
->>>>>>> fdcdba9 (notification rendered , notification functionality not done yet)
 }
