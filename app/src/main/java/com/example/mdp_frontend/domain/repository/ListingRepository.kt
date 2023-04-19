@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 typealias Listings = List<Listing>
 typealias ListingsResponse = Response<Listings>
 typealias AddListingResponse = Response<Boolean>
-typealias ListingActionResponse = Response<Boolean>
+typealias ListingActionResponse = Response<String>
 
 interface ListingRepository {
     fun getListingsFromFirestore(
@@ -23,6 +23,7 @@ interface ListingRepository {
     suspend fun addListingToFirestore(listing: Listing): AddListingResponse
 
     suspend fun getListingById(id: String): Listing
+
     suspend fun callBackTheListing(id: String, user: User): ListingActionResponse
 
     suspend fun acceptCallBack(id: String): ListingActionResponse
