@@ -44,11 +44,13 @@ fun RequestNotificationBox(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    /*
                     Image(
                         bitmap = jobRequest.taskerPicture,
                         contentDescription = "Tasker Picture",
                         modifier = Modifier.size(40.dp).clip(CircleShape)
                     )
+                     */
                     Spacer(modifier = Modifier.width(8.dp))
 
 
@@ -89,7 +91,7 @@ fun RequestNotificationBox(
 @Composable
 fun RequestNotificationBoxPreview() {
     val jobRequest = RequestNotificationBoxItem(
-        taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
+        //taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
         taskerName = "John Doe",
         taskerRating = 4.5f,
         requestTime = "5 mins ago",
