@@ -64,16 +64,27 @@ fun RequestNotificationBox(
                 Text(text = jobRequest.requestTime)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Service", style = MaterialTheme.typography.headlineSmall)
-            Text(text = jobRequest.serviceName)
+            Text(
+                text = "Service",
+                style = MaterialTheme.typography.displayMedium
+            )
+            Text(
+                text = jobRequest.serviceName,
+                style = MaterialTheme.typography.displayLarge
+            )
             Spacer(modifier = Modifier.height(24.dp))
             Row(horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = onDeclineClick) {
-                    Text(text = "Decline")
+                    Text(
+                        text = "Decline", style = MaterialTheme.typography.displaySmall
+                    )
                 }
                 Button(onClick = onAcceptClick) {
-                    Text(text = "Accept")
+                    Text(
+                        text = "Accept",
+                        style = MaterialTheme.typography.displaySmall
+                    )
                 }
             }
         }

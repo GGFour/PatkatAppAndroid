@@ -18,4 +18,10 @@
     <string name="create_listing_title_review">Review Your Listing</string>
 
     <string name="listing_price_template">%d €</string>
+    <string name="senderName" />
+    <string name="messageContent" />
+    <string name="sentAt" />
+    <string name="taskerName" />
+    <string name="serviceName" />
+    <string name="profileHeader" />
 </resources>

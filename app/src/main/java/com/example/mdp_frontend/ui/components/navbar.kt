@@ -43,7 +43,10 @@ fun BottomNavigationBar(
                                 badge = {
                                     Badge {
                                         if (item.badgeCount > 0) {
-                                            Text(text = item.badgeCount.toString())
+                                            Text(
+                                                text = item.badgeCount.toString(),
+                                                style = MaterialTheme.typography.displayLarge
+                                            )
                                         }
                                     }
                                 }

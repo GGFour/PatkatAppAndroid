@@ -4,6 +4,7 @@ package com.example.mdp_frontend.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ fun MessageBubble(message: MessageBubbleItem) {
         Column {
             Text(
                 text = message.senderName,
+                style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
@@ -46,6 +48,7 @@ fun MessageBubble(message: MessageBubbleItem) {
 
             Text(
                 text = message.messageContent,
+                style = MaterialTheme.typography.displaySmall,
                 fontSize = 16.sp
             )
         }
@@ -54,6 +57,7 @@ fun MessageBubble(message: MessageBubbleItem) {
 
         Text(
             text = message.sentAt,
+            style = MaterialTheme.typography.displaySmall,
             fontSize = 12.sp,
             textAlign = TextAlign.End
         )

@@ -105,7 +105,7 @@ fun MDPfrontendTheme(
 
     MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
+            typography = MontserratTypography,
             content = content
     )
 }

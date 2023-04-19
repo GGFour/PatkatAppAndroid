@@ -11,9 +11,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,10 +39,26 @@ fun ProfileScreen(
         }
 
         item {
-            ProfileMenuItem(text = "Personal Info", onClick = onPersonalInfoChecked)
-            ProfileMenuItem(text = "Notifications", onClick = onNotificationsChecked)
-            ProfileMenuItem(text = "My Services", onClick = onMyServicesChecked)
-            ProfileMenuItem(text = "My Tasks", onClick = onMyTasksChecked)
+            ProfileMenuItem(
+                text = "Personal Info",
+                style = MaterialTheme.typography.displaySmall,
+                onClick = onPersonalInfoChecked,
+            )
+            ProfileMenuItem(
+                text = "Notifications",
+                onClick = onNotificationsChecked,
+                style = MaterialTheme.typography.displaySmall
+            )
+            ProfileMenuItem(
+                text = "My Services",
+                onClick = onMyServicesChecked,
+                style = MaterialTheme.typography.displaySmall
+            )
+            ProfileMenuItem(
+                text = "My Tasks",
+                onClick = onMyTasksChecked,
+                style = MaterialTheme.typography.displaySmall
+            )
         }
     }
 }
@@ -49,6 +67,7 @@ fun ProfileScreen(
 fun ProfileHeader(name: String) {
     Text(
         text = name,
+        style = MaterialTheme.typography.displayMedium,
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
@@ -56,7 +75,7 @@ fun ProfileHeader(name: String) {
 }
 
 @Composable
-fun ProfileMenuItem(text: String, onClick: () -> Unit) {
+fun ProfileMenuItem(text: String, onClick: () -> Unit, style: TextStyle = MaterialTheme.typography.displayMedium) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -87,6 +106,7 @@ fun ProfileMenuItem(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
+                style = MaterialTheme.typography.displayMedium
                 //fontWeight = FontWeight.Bold
             )
 

@@ -14,7 +14,10 @@ import com.example.mdp_frontend.model.TopBarItem
 @Composable
 fun TopBar(model: TopBarItem) {
     TopAppBar(
-        title = { Text(text = model.title) },
+        title = { Text(
+            text = model.title,
+            style = MaterialTheme.typography.displayLarge
+        ) },
         navigationIcon = {
             if (model.drawNavUp) {
                 IconButton(onClick = model.onNavUpPressed) {

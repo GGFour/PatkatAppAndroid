@@ -115,20 +115,26 @@ fun CreateListing(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Have a work to do?",
+                    text = "Expand your reach, Hire someone today!",
+                    style = MaterialTheme.typography.displayLarge,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
                 )
                 Text(
-                    text = "Create a task and get a service!",
+                    text = "Create a listing and find the help you need in minutes!",
+                    style = MaterialTheme.typography.displayMedium,
                     color = md_theme_light_tertiaryContainer,
                     fontSize = 16.sp
                 )
                 Button(
-                    onClick = { onCreateListingClick() }
-                ) {
-                    Text(text = "Create")
+                    modifier = Modifier
+                        .padding(10.dp),
+                    onClick = {onCreateListingClick()}
+                ){
+                    Text(text = "Create",
+                    style = MaterialTheme.typography.displaySmall
+                    )
                 }
             }
         }
@@ -153,12 +159,14 @@ fun FeaturedItemsHeader(
 
             Text(
                 text = "Featured jobs",
+                style = MaterialTheme.typography.displaySmall,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(15.dp)
             )
             Text(
                 text = "View all",
+                style = MaterialTheme.typography.displaySmall,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
