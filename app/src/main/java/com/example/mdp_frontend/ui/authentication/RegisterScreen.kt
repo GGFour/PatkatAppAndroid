@@ -23,7 +23,6 @@ import com.example.mdp_frontend.R
 import com.example.mdp_frontend.domain.model.Resource
 import com.example.mdp_frontend.model.RegistrationFormEvent
 import com.example.mdp_frontend.ui.authentication.components.*
-import com.example.mdp_frontend.viewmodel.AuthViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -35,7 +34,7 @@ fun RegisterScreen(
     fViewModel : AuthViewModel?,
     viewModel: RegistrationViewModel = viewModel(),
 
-) {
+    ) {
     val state = viewModel.state
     val registerFlow = fViewModel?.registerFlow?.collectAsState()
 
@@ -186,8 +185,6 @@ fun RegisterScreen(
                                 Log.w(ContentValues.TAG, "Error adding document", e)
                             }
                     }
-
-
                 }
             }
         }

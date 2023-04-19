@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mdp_frontend.ui.screen.Splash
-import com.example.mdp_frontend.viewmodel.AuthViewModel
 
 enum class AuthScreenItems {
     Splash, Login, Register,
