@@ -102,7 +102,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                    val intent = Intent(context, CreateListingActivity::class.java)
                     context.startActivity(intent)
                 },
-                context = LocalContext.current
+                context = context
             )
         }
         composable(MainScreen.Map.name) {

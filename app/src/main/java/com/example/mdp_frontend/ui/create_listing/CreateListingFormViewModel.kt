@@ -1,19 +1,24 @@
 package com.example.mdp_frontend.ui.create_listing
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.Response
+import com.example.mdp_frontend.domain.model.User
 import com.example.mdp_frontend.domain.repository.AddListingResponse
 import com.example.mdp_frontend.domain.repository.CategoriesResponse
 import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
+import com.example.mdp_frontend.domain.use_case.user.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +26,8 @@ import javax.inject.Inject
 class CreateListingFormViewModel @Inject constructor(
     private val listingUseCases: ListingUseCases,
     private val categoriesUseCases: CategoriesUseCases,
-): ViewModel() {
+    private val userUseCases: UserUseCases,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(Listing())
     val uiState: StateFlow<Listing> = _uiState.asStateFlow()
     var addListingResponse by mutableStateOf<AddListingResponse>(Response.Success(false))
@@ -32,11 +38,25 @@ class CreateListingFormViewModel @Inject constructor(
 
     init {
         getCategories()
+        getCurrentUser()
     }
 
     private fun getCategories() = viewModelScope.launch {
-        categoriesUseCases.getCategories().collect {response ->
+        categoriesUseCases.getCategories().collect { response ->
             categoriesResponse = response
+        }
+    }
+
+    private fun getCurrentUser() {
+        val user = userUseCases.currentUser()
+        _uiState.update { currentState ->
+            currentState.copy(
+                publisher = User(
+                    name = user?.displayName ?: "",
+                    imageUrl = user?.photoUrl.toString() ?: "",
+                    uid = user?.uid ?: "",
+                )
+            )
         }
     }
 
@@ -65,6 +85,7 @@ class CreateListingFormViewModel @Inject constructor(
             )
         }
     }
+
     fun updateLongitude(long: Double) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -91,6 +112,7 @@ class CreateListingFormViewModel @Inject constructor(
 
     fun addListing() = viewModelScope.launch {
         addListingResponse = Response.Loading
+        getCurrentUser()
         addListingResponse = listingUseCases.addListing(uiState.value)
     }
 
