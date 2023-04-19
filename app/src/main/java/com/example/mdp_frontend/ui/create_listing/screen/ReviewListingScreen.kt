@@ -39,11 +39,11 @@ fun ReviewListingScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ElevatedButton(onClick = onSubmitPressed ) {
-                Text(text = "Submit")
-            }
             OutlinedButton(onClick = onCancelPressed) {
                 Text(text = "Cancel")
+            }
+            ElevatedButton(onClick = onSubmitPressed ) {
+                Text(text = "Submit")
             }
         }
     }
