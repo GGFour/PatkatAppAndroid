@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.model.ListingCardItem
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.delay
@@ -68,10 +70,14 @@ fun ListingCard(
                 ) {
                     val relativeTimeString = listing.date?.let { formatRelativeTime(it) }
                     if (relativeTimeString != null) {
-                        Text(text = relativeTimeString,
-                            modifier = Modifier.weight(1f))
+                        Text(
+                            text = relativeTimeString,
+                            style = MaterialTheme.typography.displaySmall,
+                            modifier = Modifier.weight(1f)
+                        )
                     }
-                    Text(text = listing.location,
+                    Text(
+                        text = listing.location,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.End
                     )

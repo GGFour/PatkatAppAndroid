@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ fun ChatScreen(modifier: Modifier) {
         Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Messages",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.displaySmall,
             //fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
@@ -41,22 +42,22 @@ fun ChatScreen(modifier: Modifier) {
         // test sample of messages
         val messages = listOf(
             MessageBubbleItem(
-                senderName = "Alice",
+                senderName = stringResource(R.string.senderName),
                 senderImage = ImageBitmap.imageResource(R.drawable.demo),
-                messageContent = "Hello!",
-                sentAt = "1 h ago"
+                messageContent = stringResource(R.string.messageContent),
+                sentAt = stringResource(R.string.sentAt)
             ),
             MessageBubbleItem(
-                senderName = "Bob",
+                senderName = stringResource(R.string.senderName),
                 senderImage = ImageBitmap.imageResource(R.drawable.demo),
-                messageContent = "Hi there!",
-                sentAt = "45 mins ago"
+                messageContent = stringResource(R.string.messageContent),
+                sentAt = stringResource(R.string.sentAt)
             ),
             MessageBubbleItem(
-                senderName = "Charlie",
+                senderName = stringResource(R.string.senderName),
                 senderImage = ImageBitmap.imageResource(R.drawable.demo),
-                messageContent = "How are you?",
-                sentAt = "30 mins ago"
+                messageContent = stringResource(R.string.messageContent),
+                sentAt = stringResource(R.string.sentAt)
             )
         )
         LazyColumn {

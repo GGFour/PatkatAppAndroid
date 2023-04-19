@@ -32,11 +32,11 @@ import com.example.mdp_frontend.AuthActivity
 
 
 @Composable
-fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(),onNavUp: () -> Unit) {
+fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(), onNavUp: () -> Unit) {
     val context = LocalContext.current
 
     SubscreenHeader(title = "Personal Info", onNavUp = onNavUp) {
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         // Use CircleAvatar to display the profile picture with a border and a placeholder image
         AsyncImage(
             // painter = rememberAsyncImagePainter(viewModel?.currentUser?.photoUrl),
@@ -91,6 +91,38 @@ fun PersonalInfo(viewModel: AuthViewModel = hiltViewModel(),onNavUp: () -> Unit)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Logout")
+
+            Column {
+                Row {
+                    Text(text = "Name", style = MaterialTheme.typography.displaySmall)
+                    Text(
+                        text = viewModel?.currentUser?.displayName ?: "",
+                        style = MaterialTheme.typography.displaySmall
+                    )
+                }
+
+                Row() {
+                    Text(text = "Email", style = MaterialTheme.typography.displaySmall)
+
+                    Text(
+                        text = viewModel?.currentUser?.email ?: "",
+                        style = MaterialTheme.typography.displaySmall
+                    )
+                }
+                // logout button
+                Button(
+                    onClick = {
+                        viewModel?.logout()
+                        // navigate to login screen
+                        // TODO navigate to login screen or launch AuthActivity
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                ) {
+                    Text(text = "Logout", style = MaterialTheme.typography.displayMedium)
+                }
+            }
         }
     }
 }

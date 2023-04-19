@@ -2,6 +2,7 @@ package com.example.mdp_frontend.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,12 +27,14 @@ fun CreateProfileBlock(onCreateProfileClick: () -> Unit) {
     ) {
         Text(
             text = "Start working!",
+            style = MaterialTheme.typography.displayMedium,
             color = Color.White,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp
         )
         Text(
             text = "Create a profile and start browsing!",
+            style = MaterialTheme.typography.displayMedium,
             color = md_theme_light_tertiaryContainer,
             fontSize = 16.sp
         )
@@ -40,7 +43,7 @@ fun CreateProfileBlock(onCreateProfileClick: () -> Unit) {
             onClick = {onCreateProfileClick() },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "Create")
+            Text(text = "Create", style = MaterialTheme.typography.displaySmall)
         }
     }
 }
