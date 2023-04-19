@@ -9,14 +9,13 @@ import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.category.GetCategories
 import com.example.mdp_frontend.domain.use_case.listing.AddListing
 import com.example.mdp_frontend.domain.use_case.listing.GetListingById
+import com.example.mdp_frontend.domain.use_case.listing.GetListings
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
 import com.example.mdp_frontend.domain.use_case.user.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,7 +50,8 @@ object AppModule {
         repo: ListingRepository
     ) = ListingUseCases(
         addListing = AddListing(repo),
-        getListingById = GetListingById(repo)
+        getListingById = GetListingById(repo),
+        getListings = GetListings (repo),
     )
 
     @Provides
