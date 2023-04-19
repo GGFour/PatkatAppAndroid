@@ -20,6 +20,8 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/*
+* It is really awful to put ui messages to data layer, but i am lazy to write xtra code*/
 @Singleton
 class ListingRepositoryImpl @Inject constructor(
     @ListingCollectionReference private val listingRef: CollectionReference
@@ -101,8 +103,8 @@ class ListingRepositoryImpl @Inject constructor(
                 state = ListingState.Noticed,
                 assignee = user,
             )
-            listingRef.document(id).set(updated)
-            Response.Success(true)
+            listingRef.document(id).set(updated).await()
+            Response.Success("Callback was sent to publisher")
         } catch (e: Exception) {
             Response.Failure(e)
         }
@@ -114,8 +116,8 @@ class ListingRepositoryImpl @Inject constructor(
             if (current == null || current.state != ListingState.Noticed) {
                 throw Exception("You can't accept the worker to this listing!")
             }
-            updateState(id, ListingState.WIP)
-            Response.Success(true)
+            listingRef.document(id).update("state", ListingState.WIP).await()
+            Response.Success("Worker has been accepted")
         } catch (e: Exception) {
             Response.Failure(e)
         }
@@ -127,8 +129,8 @@ class ListingRepositoryImpl @Inject constructor(
             if (current == null || current.state != ListingState.Noticed) {
                 throw Exception("You can't reject the worker to this listing!")
             }
-            updateState(id, ListingState.Active)
-            Response.Success(true)
+            listingRef.document(id).update("state", ListingState.Active).await()
+            Response.Success("Worker was rejected")
         } catch (e: Exception) {
             Response.Failure(e)
         }
@@ -140,14 +142,10 @@ class ListingRepositoryImpl @Inject constructor(
             if (current == null || current.state != ListingState.WIP) {
                 throw Exception("You can't finish the work on this listing!")
             }
-            updateState(id, ListingState.Finished)
-            Response.Success(true)
+            listingRef.document(id).update("state", ListingState.Finished).await()
+            Response.Success("Contract was finished")
         } catch (e: Exception) {
             Response.Failure(e)
         }
-    }
-
-    private fun updateState(id: String, state: ListingState) {
-        listingRef.document(id).update("state", state)
     }
 }

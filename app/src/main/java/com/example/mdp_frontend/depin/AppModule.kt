@@ -7,10 +7,7 @@ import com.example.mdp_frontend.domain.repository.CategoryRepository
 import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.use_case.category.CategoriesUseCases
 import com.example.mdp_frontend.domain.use_case.category.GetCategories
-import com.example.mdp_frontend.domain.use_case.listing.AddListing
-import com.example.mdp_frontend.domain.use_case.listing.GetListingById
-import com.example.mdp_frontend.domain.use_case.listing.GetListings
-import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
+import com.example.mdp_frontend.domain.use_case.listing.*
 import com.example.mdp_frontend.domain.use_case.user.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -52,6 +49,10 @@ object AppModule {
         addListing = AddListing(repo),
         getListingById = GetListingById(repo),
         getListings = GetListings (repo),
+        reactOnListing = ReactOnListing(repo),
+        acceptCallBack = AcceptCallBack(repo),
+        rejectCallBack = RejectCallBack(repo),
+        finishListing = FinishListing(repo),
     )
 
     @Provides

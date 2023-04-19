@@ -8,59 +8,54 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mdp_frontend.R
-import com.example.mdp_frontend.model.RequestNotificationBoxItem
 import com.example.mdp_frontend.ui.components.RequestNotificationBox
-import com.example.mdp_frontend.ui.components.SubscreenHeader
 
 @Composable
 fun Notifications(
     onNavUp: () -> Unit,
     viewModel: NotificationsViewModel = hiltViewModel()
 ) {
-     val notifications by viewModel.notifications.collectAsState()
+    val notifications by viewModel.notifications.collectAsState()
 
     //sample data but it will be changed
     /*
-     val notifications = listOf(
-        RequestNotificationBoxItem(
-          //  taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-            taskerName = "John Doe",
-            taskerRating = 4.5f,
-            requestTime = "10:30 AM",
-            serviceName = "Cleaning"
-        ),
-        RequestNotificationBoxItem(
-            //taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-            taskerName = "Jane J",
-            taskerRating = 4.0f,
-            requestTime = "11:00 AM",
-            serviceName = "Gardening"
-        ),
-        RequestNotificationBoxItem(
-           // taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-            taskerName = "Bob J",
-            taskerRating = 3.5f,
-            requestTime = "1:30 PM",
-            serviceName = "Plumbing"
-        )
+    val notifications = listOf(
+       RequestNotificationBoxItem(
+         //  taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
+           taskerName = "John Doe",
+           taskerRating = 4.5f,
+           requestTime = "10:30 AM",
+           serviceName = "Cleaning"
+       ),
+       RequestNotificationBoxItem(
+           //taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
+           taskerName = "Jane J",
+           taskerRating = 4.0f,
+           requestTime = "11:00 AM",
+           serviceName = "Gardening"
+       ),
+       RequestNotificationBoxItem(
+          // taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
+           taskerName = "Bob J",
+           taskerRating = 3.5f,
+           requestTime = "1:30 PM",
+           serviceName = "Plumbing"
+       )
     )
-     */
-        LazyColumn {
-            items(notifications) { notification ->
-                RequestNotificationBox(
-                    jobRequest = notification,
-                    onAcceptClick = { /* do something */ },
-                    onDeclineClick = { /* do something */ }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+    */
+    LazyColumn {
+        items(notifications) { notification ->
+            RequestNotificationBox(
+                jobRequest = notification,
+                onAcceptClick = { /* do something */ },
+                onDeclineClick = { /* do something */ }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
+}
 
 /*
 @Composable
