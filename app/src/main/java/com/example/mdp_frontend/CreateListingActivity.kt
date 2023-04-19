@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mdp_frontend.ui.screen.CreateListingScreen
+import com.example.mdp_frontend.ui.create_listing.CreateListingScreen
 import com.example.mdp_frontend.ui.theme.MDPfrontendTheme
 import dagger.hilt.android.AndroidEntryPoint
 
