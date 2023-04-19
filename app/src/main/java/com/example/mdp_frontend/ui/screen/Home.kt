@@ -1,30 +1,27 @@
 package com.example.mdp_frontend.ui.screen
 
 import android.content.Context
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mdp_frontend.domain.use_case.listing.getListings
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.ui.components.Listings
-import com.example.mdp_frontend.model.ListingCardItem
-import com.example.mdp_frontend.ui.theme.*
-
-
+import com.example.mdp_frontend.ui.theme.md_theme_light_tertiary
+import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
+import com.example.mdp_frontend.viewmodel.HomeScreenViewModel
 
 
 @Composable
@@ -33,44 +30,43 @@ fun HomeScreen(
     onViewCategoriesClick: () -> Unit,
     onViewListingCardClick: (String) -> Unit,
     onCreateListingClick: () -> Unit,
-    context: Context
+    context: Context,
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val listings = remember { mutableStateOf<List<ListingCardItem>>(emptyList()) }
-    val isLoading = remember { mutableStateOf(true) }
-
-    LaunchedEffect(Unit) {
-        getListings(context, limit = 5) { listingItems ->
-            listings.value = listingItems
-            isLoading.value = false
-        }
-    }
-
     //Home Screen body
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        if (isLoading.value) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            Column {
-                Spacer(modifier = Modifier.height(30.dp))
-                SearchBar()
-                /*CreateProfile(onCreateProfileClick = { /*TODO*/ })*/
-                CreateListing(onCreateListingClick = onCreateListingClick)
-                FeaturedItemsHeader(
-                    onViewAllClick = onViewCategoriesClick,
-                )
-                Listings(
-                    listings = listings.value,
-                    onListingCardClick =  { listingId ->
-                        onViewListingCardClick(listingId)
+        Column {
+            Spacer(modifier = Modifier.height(30.dp))
+            SearchBar()
+            CreateListing(onCreateListingClick = onCreateListingClick)
+            FeaturedItemsHeader(
+                onViewAllClick = onViewCategoriesClick,
+            )
+            when (viewModel.getListingsResponse) {
+                is Response.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
-                )
+                }
+                is Response.Success -> {
+                    Listings(
+                        listings = viewModel.listings,
+                        onListingCardClick = { listingId ->
+                            onViewListingCardClick(listingId)
+                        }
+                    )
+                }
+                is Response.Failure -> {
+                    Text(text = "Failed to fetch listings :(")
+                }
             }
         }
     }
 }
+
 @Composable
 fun SearchBar(modifier: Modifier = Modifier) {
     Box(
@@ -97,8 +93,9 @@ fun SearchBar(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CreateListing(onCreateListingClick: () -> Unit,
-                  color: Color = md_theme_light_tertiary
+fun CreateListing(
+    onCreateListingClick: () -> Unit,
+    color: Color = md_theme_light_tertiary
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth()
@@ -112,7 +109,7 @@ fun CreateListing(onCreateListingClick: () -> Unit,
                 .background(color)
                 .padding(horizontal = 15.dp, vertical = 20.dp)
                 .fillMaxWidth()
-        ){
+        ) {
             Column(
                 verticalArrangement = Arrangement.Center
             ) {
@@ -128,8 +125,8 @@ fun CreateListing(onCreateListingClick: () -> Unit,
                     fontSize = 16.sp
                 )
                 Button(
-                    onClick = {onCreateListingClick()}
-                ){
+                    onClick = { onCreateListingClick() }
+                ) {
                     Text(text = "Create")
                 }
             }
@@ -141,7 +138,7 @@ fun CreateListing(onCreateListingClick: () -> Unit,
 fun FeaturedItemsHeader(
     onViewAllClick: () -> Unit,
 
-) {
+    ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -170,7 +167,5 @@ fun FeaturedItemsHeader(
         }
 
     }
-
-
 }
 

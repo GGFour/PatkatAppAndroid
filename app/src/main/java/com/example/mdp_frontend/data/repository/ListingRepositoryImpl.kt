@@ -2,12 +2,17 @@ package com.example.mdp_frontend.data.repository
 
 import com.example.mdp_frontend.depin.ListingCollectionReference
 import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.domain.model.Response
+import com.example.mdp_frontend.domain.model.User
 import com.example.mdp_frontend.domain.repository.AddListingResponse
+import com.example.mdp_frontend.domain.repository.ListingActionResponse
 import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.repository.ListingsResponse
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Filter
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,10 +23,41 @@ import javax.inject.Singleton
 @Singleton
 class ListingRepositoryImpl @Inject constructor(
     @ListingCollectionReference private val listingRef: CollectionReference
-    ): ListingRepository {
+) : ListingRepository {
 
-    override fun getListingsFromFirestore(): Flow<ListingsResponse> = callbackFlow {
-        val snapshotListener = listingRef.orderBy("title").addSnapshotListener { snapshot, e ->
+    override fun getListingsFromFirestore(
+        limit: Long?,
+    ): Flow<ListingsResponse> = callbackFlow {
+        var query = listingRef.orderBy("publishedDate", Query.Direction.DESCENDING)
+        if (limit != null) {
+            query = query.limit(limit)
+        }
+
+        val snapshotListener = query.addSnapshotListener { snapshot, e ->
+            val listingsResponse = if (snapshot != null) {
+                val listings = snapshot.toObjects(Listing::class.java)
+                Response.Success(listings)
+            } else {
+                e?.let { Response.Failure(it) }
+            } as ListingsResponse
+            trySend(listingsResponse)
+        }
+        awaitClose {
+            snapshotListener.remove()
+        }
+    }
+
+    override fun getListingsFromFirestore(
+        category: String,
+        limit: Long?,
+    ): Flow<ListingsResponse> = callbackFlow {
+        var query = listingRef.orderBy("publishedDate", Query.Direction.DESCENDING)
+            .where(Filter.equalTo("category", category))
+        if (limit != null) {
+            query = query.limit(limit)
+        }
+
+        val snapshotListener = query.addSnapshotListener { snapshot, e ->
             val listingsResponse = if (snapshot != null) {
                 val listings = snapshot.toObjects(Listing::class.java)
                 Response.Success(listings)
@@ -43,7 +79,7 @@ class ListingRepositoryImpl @Inject constructor(
                 publishedDate = Timestamp.now(),
                 pictureUri = null,
             )
-            listingRef.document(id).set(listingWithId)
+            listingRef.document(id).set(listingWithId).await()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Failure(e)
@@ -53,5 +89,65 @@ class ListingRepositoryImpl @Inject constructor(
     override suspend fun getListingById(id: String): Listing {
         val document = listingRef.document(id).get().await()
         return document.toObject(Listing::class.java)!!
+    }
+
+    override suspend fun callBackTheListing(id: String, user: User): ListingActionResponse {
+        return try {
+            val current = listingRef.document(id).get().await().toObject(Listing::class.java)
+            if (current == null || current.state != ListingState.Active) {
+                throw Exception("You can't react to this listing!")
+            }
+            val updated = current.copy(
+                state = ListingState.Noticed,
+                assignee = user,
+            )
+            listingRef.document(id).set(updated)
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun acceptCallBack(id: String): ListingActionResponse {
+        return try {
+            val current = listingRef.document(id).get().await().toObject(Listing::class.java)
+            if (current == null || current.state != ListingState.Noticed) {
+                throw Exception("You can't accept the worker to this listing!")
+            }
+            updateState(id, ListingState.WIP)
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun rejectCallBack(id: String): ListingActionResponse {
+        return try {
+            val current = listingRef.document(id).get().await().toObject(Listing::class.java)
+            if (current == null || current.state != ListingState.Noticed) {
+                throw Exception("You can't reject the worker to this listing!")
+            }
+            updateState(id, ListingState.Active)
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun finishListing(id: String): ListingActionResponse {
+        return try {
+            val current = listingRef.document(id).get().await().toObject(Listing::class.java)
+            if (current == null || current.state != ListingState.WIP) {
+                throw Exception("You can't finish the work on this listing!")
+            }
+            updateState(id, ListingState.Finished)
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    private fun updateState(id: String, state: ListingState) {
+        listingRef.document(id).update("state", state)
     }
 }
