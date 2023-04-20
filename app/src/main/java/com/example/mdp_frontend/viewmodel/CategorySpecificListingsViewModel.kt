@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.repository.Listings
 import com.example.mdp_frontend.domain.repository.ListingsResponse
@@ -32,8 +33,8 @@ class CategorySpecificListingsViewModel @Inject constructor(
         getListings()
     }
 
-    private fun getListings(limit: Long = 5) = viewModelScope.launch {
-        listingUseCases.getListings(limit).collect { response ->
+    private fun getListings(state: ListingState =ListingState.Active , limit: Long = 5) = viewModelScope.launch {
+        listingUseCases.getListings(state,limit).collect { response ->
             getListingsResponse = response
             if (getListingsResponse is Response.Success) {
                 listings.clear()

@@ -19,48 +19,14 @@ fun Notifications(
 ) {
     val notifications by viewModel.notifications.collectAsState()
 
-    //sample data but it will be changed
-    /*
-    val notifications = listOf(
-       RequestNotificationBoxItem(
-         //  taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-           taskerName = "John Doe",
-           taskerRating = 4.5f,
-           requestTime = "10:30 AM",
-           serviceName = "Cleaning"
-       ),
-       RequestNotificationBoxItem(
-           //taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-           taskerName = "Jane J",
-           taskerRating = 4.0f,
-           requestTime = "11:00 AM",
-           serviceName = "Gardening"
-       ),
-       RequestNotificationBoxItem(
-          // taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-           taskerName = "Bob J",
-           taskerRating = 3.5f,
-           requestTime = "1:30 PM",
-           serviceName = "Plumbing"
-       )
-    )
-    */
     LazyColumn {
         items(notifications) { notification ->
             RequestNotificationBox(
                 jobRequest = notification,
-                onAcceptClick = { /* do something */ },
-                onDeclineClick = { /* do something */ }
+                onAcceptClick = { viewModel.acceptRequest(notification) },
+                onDeclineClick = { viewModel.declineRequest(notification) }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
-
-/*
-@Composable
-@Preview
-fun NoPreview(){
-    Notifications()
-}
- */

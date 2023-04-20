@@ -298,30 +298,3 @@ fun ListingViewItself(listing: Listing) {
         }
     }
 }
-
-/*
-@Composable
-@Preview
-fun ListingDetailScreenPreview() {
-
-    ListingDetailScreen(
-        Listing(
-            id = "1",
-    pictureUrl = "https://picsum.photos/200",
-    title = "Sample Listing",
-    description = "This is a sample listing for preview purposes." +
-            "senectus et netus et malesuada fames ac turpis egestas. " +
-            "Vestibulum tortor quam, feugiat vitae, ultricies eget, " +
-            "tempor sit amet, ante. Donec eu libero sit amet quam egestas semper." +
-            "Aenean ultricies mi vitae est",
-    publisher = User(
-        imageUrl = "https://picsum.photos/40",
-        name = "John Doe",
-    ),
-    rating = 4,
-    price = 99.99
-    )
-    )
-}
-
- */
