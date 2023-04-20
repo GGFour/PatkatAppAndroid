@@ -1,21 +1,15 @@
 package com.example.mdp_frontend.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.example.mdp_frontend.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.model.RequestNotificationBoxItem
 import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
@@ -83,25 +77,4 @@ fun RequestNotificationBox(
             }
         }
     }
-}
-//it will be deleted!
-
-
-@Preview
-@Composable
-fun RequestNotificationBoxPreview() {
-    val jobRequest = RequestNotificationBoxItem(
-        //taskerPicture = ImageBitmap.imageResource(R.drawable.demo),
-        taskerName = "John Doe",
-        taskerRating = 4.5f,
-        requestTime = "5 mins ago",
-        //serviceTitle = "Service",
-        serviceName = "Cleaning"
-    )
-
-    RequestNotificationBox(
-        jobRequest= jobRequest,
-        onAcceptClick = { /* TODO: Handle accept click */ },
-        onDeclineClick = { /* TODO: Handle decline click */ }
-    )
 }

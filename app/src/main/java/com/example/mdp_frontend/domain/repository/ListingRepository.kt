@@ -1,6 +1,7 @@
 package com.example.mdp_frontend.domain.repository
 
 import com.example.mdp_frontend.domain.model.Listing
+import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,7 @@ typealias ListingActionResponse = Response<String>
 
 interface ListingRepository {
     fun getListingsFromFirestore(
+        state: ListingState? = null,
         limit: Long? = null,
     ): Flow<ListingsResponse>
 

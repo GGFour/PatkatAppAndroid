@@ -28,9 +28,13 @@ class ListingRepositoryImpl @Inject constructor(
 ) : ListingRepository {
 
     override fun getListingsFromFirestore(
+        state: ListingState?,
         limit: Long?,
     ): Flow<ListingsResponse> = callbackFlow {
         var query = listingRef.orderBy("publishedDate", Query.Direction.DESCENDING)
+        if (state != null) {
+            query = query.whereEqualTo("state", state)
+        }
         if (limit != null) {
             query = query.limit(limit)
         }
