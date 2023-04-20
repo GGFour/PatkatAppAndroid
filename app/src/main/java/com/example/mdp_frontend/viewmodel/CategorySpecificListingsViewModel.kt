@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.domain.model.Response
+import com.example.mdp_frontend.domain.repository.ListingRepository
 import com.example.mdp_frontend.domain.repository.Listings
 import com.example.mdp_frontend.domain.repository.ListingsResponse
 import com.example.mdp_frontend.domain.use_case.listing.ListingUseCases
@@ -21,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategorySpecificListingsViewModel @Inject constructor(
-    private val listingUseCases: ListingUseCases,
+    private val listingRepository: ListingRepository,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     var getListingsResponse by mutableStateOf<ListingsResponse>(Response.Loading)
@@ -29,32 +30,39 @@ class CategorySpecificListingsViewModel @Inject constructor(
     var listings = mutableListOf<ListingCardItem>()
         private set
 
-    init {
-        getListings()
-    }
 
-    private fun getListings(state: ListingState =ListingState.Active , limit: Long = 5) = viewModelScope.launch {
-        listingUseCases.getListings(state,limit).collect { response ->
-            getListingsResponse = response
-            if (getListingsResponse is Response.Success) {
-                listings.clear()
-                listings.addAll((getListingsResponse as Response.Success<Listings>).data.map { listing: Listing ->
-                    val address = if (listing.latitude != null && listing.longitude != null) {
-                        getAddressFromLocation(
-                            listing.latitude.toFloat(),
-                            listing.longitude.toFloat()
-                        )
-                    } else {
-                        "Error: Invalid location"
+    fun getListings(
+        category: String?,
+        limit: Long = 5,
+        state: ListingState = ListingState.Active,
+    ) {
+        viewModelScope.launch {
+            if (category != null) {
+                listingRepository.getListingsFromFirestore(category, limit).collect { response ->
+                    getListingsResponse = response
+                    if (getListingsResponse is Response.Success) {
+                        listings.clear()
+                        listings.addAll((getListingsResponse as Response.Success<Listings>).data.map { listing: Listing ->
+                            val address = if (listing.latitude != null && listing.longitude != null) {
+                                getAddressFromLocation(
+                                    listing.latitude.toFloat(),
+                                    listing.longitude.toFloat()
+                                )
+                            } else {
+                                "Error: Invalid location"
+                            }
+                            ListingCardItem(
+                                title = listing.title,
+                                category = listing.category ?: "",
+                                location = address,
+                                id = listing.id,
+                                date = listing.publishedDate
+                            )
+                        })
+                    } else if (getListingsResponse is Response.Failure) {
+                        (getListingsResponse as Response.Failure).e.printStackTrace()
                     }
-                    ListingCardItem(
-                        title = listing.title,
-                        category = listing.category ?: "",
-                        location = address,
-                        id = listing.id,
-                        date = listing.publishedDate
-                    )
-                })
+                }
             }
         }
     }

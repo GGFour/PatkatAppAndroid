@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,16 +42,16 @@ fun TaskServiceRow(service: TaskServiceRowItem) {
                     ListingState.Active -> Icons.Filled.CheckCircle
                     ListingState.WIP -> Icons.Filled.Schedule
                     ListingState.Finished -> Icons.Filled.Cancel
-                    ListingState.Noticed -> TODO()
-                    ListingState.Abandoned -> TODO()
+                    ListingState.Noticed -> Icons.Filled.Info
+                    ListingState.Abandoned -> Icons.Filled.Warning
                 },
                 contentDescription = null,
                 tint = when (service.status) {
                     ListingState.Active -> colorScheme.primary
                     ListingState.WIP -> colorScheme.secondary
                     ListingState.Finished -> colorScheme.error
-                    ListingState.Noticed -> TODO()
-                    ListingState.Abandoned -> TODO()
+                    ListingState.Noticed -> colorScheme.primary
+                    ListingState.Abandoned -> colorScheme.error
                 }
             )
             Spacer(modifier = Modifier.width(8.dp))

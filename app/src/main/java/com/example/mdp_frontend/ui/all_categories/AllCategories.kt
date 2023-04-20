@@ -23,7 +23,7 @@ import com.example.mdp_frontend.ui.theme.md_theme_light_background
 @Composable
 fun AllCategories(
     onNavUp: () -> Unit,
-    onCategoryBoxChecked: () -> Unit,
+    onCategoryBoxChecked: (String) -> Unit,
     viewModel: AllCategoriesViewModel = hiltViewModel(),
 ) {
     Column(modifier = Modifier.

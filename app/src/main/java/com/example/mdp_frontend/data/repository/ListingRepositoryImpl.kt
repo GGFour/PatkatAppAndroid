@@ -1,6 +1,7 @@
 package com.example.mdp_frontend.data.repository
 
 import com.example.mdp_frontend.depin.ListingCollectionReference
+import com.example.mdp_frontend.domain.model.Category
 import com.example.mdp_frontend.domain.model.Listing
 import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.domain.model.Response
@@ -96,6 +97,7 @@ class ListingRepositoryImpl @Inject constructor(
         val document = listingRef.document(id).get().await()
         return document.toObject(Listing::class.java)!!
     }
+
 
     override suspend fun callBackTheListing(id: String, user: User): ListingActionResponse {
         return try {
