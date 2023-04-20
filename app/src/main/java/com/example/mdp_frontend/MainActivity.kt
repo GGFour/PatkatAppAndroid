@@ -126,10 +126,14 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         composable(MainScreen.AllCategories.name) {
             AllCategories(
                 onNavUp = { navController.navigateUp() },
-                onCategoryBoxChecked = { navController.navigate(MainScreen.CategorySpecific.name) }
+                onCategoryBoxChecked = { navController.navigate(MainScreen.CategorySpecific.name + "/$it") }
             )
         }
-        composable(MainScreen.CategorySpecific.name) {
+        composable(
+            route = "${MainScreen.CategorySpecific.name}/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val category = backStackEntry.arguments?.getString("category")
             Category_specificListing(
                 modifier,
                 onNavUp = { navController.navigateUp() },
@@ -138,30 +142,9 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
                     navController.navigate("ListingDetails/$listingId")
                 },
                 context = LocalContext.current,
+                category = category
             )
         }
-        /*
-         composable(MainScreen.ListingDetails.name) {
-                 ListingDetailScreen(
-                     Listing(
-             id = "1",
-             pictureUrl = "https://picsum.photos/200",
-             title = "Sample Listing",
-             description = "This is a sample listing for preview purposes." +
-                     "senectus et netus et malesuada fames ac turpis egestas. " +
-                     "Vestibulum tortor quam, feugiat vitae, ultricies eget, " +
-                     "tempor sit amet, ante. Donec eu libero sit amet quam egestas semper." +
-                     "Aenean ultricies mi vitae est",
-                         publisher = User(name = "John Doe", imageUrl = "https://picsum.photos/40"),
-             rating = 4,
-             price = 99.99
-         ),
-                 onNavUp = { navController.navigateUp()}
-         ) }
-
-         */
-
-        //new
         composable(
             route = "ListingDetails/{listingId}",
             arguments = listOf(navArgument("listingId") { type = NavType.StringType })

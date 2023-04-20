@@ -26,7 +26,7 @@ import com.example.mdp_frontend.ui.theme.md_theme_light_tertiaryContainer
 @Composable
 fun CategoryBox(category: Category,
                 modifier: Modifier = Modifier,
-                onClick: () -> Unit
+                onClick: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -37,7 +37,7 @@ fun CategoryBox(category: Category,
                 shape = RoundedCornerShape (20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(category.name) })
     ) {
         Column(
             modifier = Modifier

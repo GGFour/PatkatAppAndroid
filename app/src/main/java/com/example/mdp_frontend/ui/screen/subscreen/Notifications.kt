@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mdp_frontend.ui.components.RequestNotificationBox
+import com.example.mdp_frontend.ui.components.SubscreenHeader
 
 @Composable
 fun Notifications(
@@ -19,14 +20,16 @@ fun Notifications(
 ) {
     val notifications by viewModel.notifications.collectAsState()
 
-    LazyColumn {
-        items(notifications) { notification ->
-            RequestNotificationBox(
-                jobRequest = notification,
-                onAcceptClick = { viewModel.acceptRequest(notification) },
-                onDeclineClick = { viewModel.declineRequest(notification) }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+    SubscreenHeader(title = "My Notifications", onNavUp = onNavUp) {
+        LazyColumn {
+            items(notifications) { notification ->
+                RequestNotificationBox(
+                    jobRequest = notification,
+                    onAcceptClick = { viewModel.acceptRequest(notification) },
+                    onDeclineClick = { viewModel.declineRequest(notification) }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

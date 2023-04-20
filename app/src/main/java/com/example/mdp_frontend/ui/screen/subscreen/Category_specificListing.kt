@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,8 +23,12 @@ fun Category_specificListing(
     onNavUp: () -> Unit,
     onListingCardClick: (String) -> Unit,
     context: Context,
+    category: String?,
     viewModel: CategorySpecificListingsViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(category) {
+        viewModel.getListings(category)
+    }
 
     Column {
         TopBar(

@@ -48,6 +48,7 @@ object AppModule {
     ) = ListingUseCases(
         addListing = AddListing(repo),
         getListingById = GetListingById(repo),
+        getListingsByCategory = GetListingsByCategory(repo),
         getListings = GetListings (repo),
         reactOnListing = ReactOnListing(repo),
         acceptCallBack = AcceptCallBack(repo),
