@@ -1,50 +1,48 @@
 package com.example.mdp_frontend.ui.screen.subscreen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.mdp_frontend.domain.model.ListingState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mdp_frontend.domain.model.Response
 import com.example.mdp_frontend.model.TaskServiceRowItem
 import com.example.mdp_frontend.ui.components.SubscreenHeader
 import com.example.mdp_frontend.ui.components.TaskServiceRow
 
 
 @Composable
-fun MyTasks(services: List<TaskServiceRowItem>, onNavUp: () -> Unit) {
+fun MyTasks(
+    onTaskClick: (String) -> Unit,
+    onNavUp: () -> Unit,
+    viewModel: MyTasksViewModel = hiltViewModel(),
+) {
     SubscreenHeader(title = "My Tasks", onNavUp = onNavUp) {
 
-        val colorScheme = MaterialTheme.colorScheme
-        LazyColumn {
-            items(services) { service ->
-                TaskServiceRow(service = service)
-                Divider(color = colorScheme.onSurfaceVariant)
+        when (viewModel.servicesResponse) {
+            is Response.Loading -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+            }
+            is Response.Success -> {
+                LazyColumn {
+                    items((viewModel.servicesResponse as Response.Success<List<TaskServiceRowItem>>).data) { service ->
+                        TaskServiceRow(service = service, onClick = onTaskClick)
+                        Divider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            is Response.Failure -> {
+                Text("Something went wrong :<")
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun MyTasksPreview() {
-    val services = listOf(
-        TaskServiceRowItem(
-            name = "Example Task 1",
-            status = ListingState.Active,
-            price = 100
-        ),
-        TaskServiceRowItem(
-            name = "Example Task 2",
-            status = ListingState.WIP,
-            price = 200
-        ),
-        TaskServiceRowItem(
-            name = "Example Task 3",
-            status = ListingState.Finished,
-            price = 300
-        )
-    )
-    MyTasks(services = services, onNavUp = {})
 }
