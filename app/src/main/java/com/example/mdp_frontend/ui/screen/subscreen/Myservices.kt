@@ -17,6 +17,7 @@ import com.example.mdp_frontend.ui.components.TaskServiceRow
 @Composable
 fun MyServices(
     onNavUp: () -> Unit,
+    onTaskClick: (String) -> Unit,
     viewModel: MyServicesViewModel = hiltViewModel()
 ) {
 
@@ -35,7 +36,7 @@ fun MyServices(
                 val colorScheme = MaterialTheme.colorScheme
                 LazyColumn {
                     items(services) { service ->
-                        TaskServiceRow(service = service)
+                        TaskServiceRow(service = service, onClick = onTaskClick)
                         Divider(color = colorScheme.onSurfaceVariant)
                     }
                 }

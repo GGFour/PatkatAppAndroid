@@ -165,16 +165,21 @@ fun Navigation(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(MainScreen.MyServices.name) {
-            MyServices( onNavUp = { navController.navigateUp() })
+            MyServices(
+                onNavUp = { navController.navigateUp() },
+                onTaskClick = { listingId ->
+                    navController.navigate("ListingDetails/$listingId")
+                }
+            )
         }
-/*
         composable(MainScreen.MyTasks.name) {
-            MyTasks( onNavUp = { navController.navigateUp() })
+            MyTasks(
+                onNavUp = { navController.navigateUp() },
+                onTaskClick = { listingId ->
+                    navController.navigate("ListingDetails/$listingId")
+                }
+            )
         }
-             */
-
-
-
     }
 }
 

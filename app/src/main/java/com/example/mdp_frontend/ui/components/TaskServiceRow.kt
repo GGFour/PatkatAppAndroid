@@ -1,5 +1,6 @@
 package com.example.mdp_frontend.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,14 +23,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mdp_frontend.domain.model.ListingState
 import com.example.mdp_frontend.model.TaskServiceRowItem
+import com.google.android.gms.tasks.Task
 
 @Composable
-fun TaskServiceRow(service: TaskServiceRowItem) {
+fun TaskServiceRow(service: TaskServiceRowItem, onClick: (String) -> Unit) {
     val colorScheme = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { onClick(service.id) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Icon and status name
@@ -41,7 +44,7 @@ fun TaskServiceRow(service: TaskServiceRowItem) {
                 imageVector = when (service.status) {
                     ListingState.Active -> Icons.Filled.CheckCircle
                     ListingState.WIP -> Icons.Filled.Schedule
-                    ListingState.Finished -> Icons.Filled.Cancel
+                    ListingState.Finished -> Icons.Filled.CheckCircle
                     ListingState.Noticed -> Icons.Filled.Info
                     ListingState.Abandoned -> Icons.Filled.Warning
                 },
@@ -49,7 +52,7 @@ fun TaskServiceRow(service: TaskServiceRowItem) {
                 tint = when (service.status) {
                     ListingState.Active -> colorScheme.primary
                     ListingState.WIP -> colorScheme.secondary
-                    ListingState.Finished -> colorScheme.error
+                    ListingState.Finished -> colorScheme.onSurface
                     ListingState.Noticed -> colorScheme.primary
                     ListingState.Abandoned -> colorScheme.error
                 }
@@ -85,7 +88,8 @@ fun TaskServiceRowPreview() {
     val service = TaskServiceRowItem(
         name = "Example Service",
         status = ListingState.Active,
-        price = 100
+        price = 100,
+        id = "",
     )
-    TaskServiceRow(service = service)
+    TaskServiceRow(service = service, onClick = {})
 }

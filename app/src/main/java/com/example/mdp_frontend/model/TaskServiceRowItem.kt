@@ -6,4 +6,5 @@ data class TaskServiceRowItem(
     val name: String,
     val status: ListingState,
     val price: Int,
+    val id: String,
 )

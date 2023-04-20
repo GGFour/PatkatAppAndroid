@@ -8,12 +8,11 @@ class GetListings(
 ) {
     operator fun invoke(
         state: ListingState? = null,
-        limit: Long?,
-
+        limit: Long? = null,
     ) = repo.getListingsFromFirestore(state,limit)
+
     operator fun invoke(
         category: String,
-        limit: Long?,
-
+        limit: Long? = null,
     ) = repo.getListingsFromFirestore(category, limit)
 }
